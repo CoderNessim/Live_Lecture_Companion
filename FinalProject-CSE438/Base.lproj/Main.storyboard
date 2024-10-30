@@ -41,20 +41,58 @@
                                     </navigationItem>
                                 </items>
                             </navigationBar>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="meO-t5-dES">
+                                <rect key="frame" x="0.0" y="141" width="393" height="241"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="241" id="td2-F1-Fld"/>
+                                </constraints>
+                            </tableView>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="hbD-ZX-qj5">
+                                <rect key="frame" x="0.0" y="419" width="393" height="355"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Model Thoughts" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f1r-8Q-bbA">
+                                <rect key="frame" x="16" y="390" width="125" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Transcript" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HZt-Xf-hGC">
+                                <rect key="frame" x="16" y="112" width="77" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="meO-t5-dES" firstAttribute="trailing" secondItem="iS3-ZL-WKu" secondAttribute="trailing" id="5Lb-2S-Oqw"/>
+                            <constraint firstItem="HZt-Xf-hGC" firstAttribute="top" secondItem="iS3-ZL-WKu" secondAttribute="bottom" constant="9" id="6CO-Xh-uU8"/>
+                            <constraint firstItem="meO-t5-dES" firstAttribute="top" secondItem="HZt-Xf-hGC" secondAttribute="bottom" constant="8" id="6Ch-Vw-lgy"/>
                             <constraint firstItem="iS3-ZL-WKu" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="8Tv-fd-6Mh"/>
+                            <constraint firstItem="meO-t5-dES" firstAttribute="leading" secondItem="hbD-ZX-qj5" secondAttribute="leading" id="BgA-RN-6cq"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="f1r-8Q-bbA" secondAttribute="trailing" constant="252" id="Bk6-bb-SI6"/>
+                            <constraint firstItem="HM7-Db-mrz" firstAttribute="top" secondItem="hbD-ZX-qj5" secondAttribute="bottom" id="IpX-QQ-esO"/>
+                            <constraint firstItem="HZt-Xf-hGC" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="f1r-8Q-bbA" secondAttribute="leading" id="QhP-5A-YeF"/>
                             <constraint firstItem="iS3-ZL-WKu" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="bdt-7J-S6x"/>
+                            <constraint firstItem="meO-t5-dES" firstAttribute="trailing" secondItem="hbD-ZX-qj5" secondAttribute="trailing" id="csO-XR-kza"/>
+                            <constraint firstItem="hbD-ZX-qj5" firstAttribute="top" secondItem="f1r-8Q-bbA" secondAttribute="bottom" constant="8" id="dvk-fZ-vjX"/>
                             <constraint firstItem="HM7-Db-mrz" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="f9G-8C-rva"/>
                             <constraint firstItem="iS3-ZL-WKu" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="kBi-o6-apF"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="HZt-Xf-hGC" secondAttribute="trailing" constant="300" id="rx0-20-oCa"/>
                             <constraint firstItem="iS3-ZL-WKu" firstAttribute="trailing" secondItem="HM7-Db-mrz" secondAttribute="trailing" id="t1I-30-Fr2"/>
+                            <constraint firstItem="f1r-8Q-bbA" firstAttribute="top" secondItem="meO-t5-dES" secondAttribute="bottom" constant="8" id="uUg-pS-ahv"/>
                             <constraint firstItem="iS3-ZL-WKu" firstAttribute="leading" secondItem="HM7-Db-mrz" secondAttribute="leading" id="wTc-s7-5Zp"/>
+                            <constraint firstItem="HZt-Xf-hGC" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="yb1-gm-b9p"/>
+                            <constraint firstItem="meO-t5-dES" firstAttribute="leading" secondItem="iS3-ZL-WKu" secondAttribute="leading" id="zWY-Vu-4BM"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="modelThoughtsTableView" destination="hbD-ZX-qj5" id="eSN-Cs-MQN"/>
                         <outlet property="navbar" destination="0IG-qU-PRd" id="avf-1H-4Er"/>
+                        <outlet property="transcriptTableView" destination="meO-t5-dES" id="rA8-UY-RO5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
