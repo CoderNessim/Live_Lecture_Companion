@@ -15,6 +15,8 @@
 		5436153B2CCC86880063BB7F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5436153A2CCC86880063BB7F /* Assets.xcassets */; };
 		5436153E2CCC86880063BB7F /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 5436153D2CCC86880063BB7F /* Base */; };
 		546129B92CD2901C00098578 /* ChatBubbleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546129B82CD2901C00098578 /* ChatBubbleCell.swift */; };
+		AFA52AB82CD401F100FC74F0 /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA52AB72CD401F100FC74F0 /* HistoryViewController.swift */; };
+		AFA52ABA2CD4136D00FC74F0 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA52AB92CD4136D00FC74F0 /* ChatViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +30,8 @@
 		5436153D2CCC86880063BB7F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5436153F2CCC86880063BB7F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		546129B82CD2901C00098578 /* ChatBubbleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatBubbleCell.swift; sourceTree = "<group>"; };
+		AFA52AB72CD401F100FC74F0 /* HistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewController.swift; sourceTree = "<group>"; };
+		AFA52AB92CD4136D00FC74F0 /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +73,8 @@
 				5436153C2CCC86880063BB7F /* LaunchScreen.storyboard */,
 				5436153F2CCC86880063BB7F /* Info.plist */,
 				543615372CCC86860063BB7F /* FinalProject_CSE438.xcdatamodeld */,
+				AFA52AB72CD401F100FC74F0 /* HistoryViewController.swift */,
+				AFA52AB92CD4136D00FC74F0 /* ChatViewController.swift */,
 			);
 			path = "FinalProject-CSE438";
 			sourceTree = "<group>";
@@ -147,6 +153,8 @@
 				543615392CCC86860063BB7F /* FinalProject_CSE438.xcdatamodeld in Sources */,
 				546129B92CD2901C00098578 /* ChatBubbleCell.swift in Sources */,
 				543615332CCC86860063BB7F /* ViewController.swift in Sources */,
+				AFA52ABA2CD4136D00FC74F0 /* ChatViewController.swift in Sources */,
+				AFA52AB82CD401F100FC74F0 /* HistoryViewController.swift in Sources */,
 				5436152F2CCC86860063BB7F /* AppDelegate.swift in Sources */,
 				543615312CCC86860063BB7F /* SceneDelegate.swift in Sources */,
 			);
