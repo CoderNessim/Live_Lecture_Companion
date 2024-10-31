@@ -17,9 +17,9 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="HM7-Db-mrz">
-                                <rect key="frame" x="0.0" y="774" width="393" height="44"/>
+                                <rect key="frame" x="0.0" y="774" width="356" height="44"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="z7Y-Sr-JgC"/>
+                                    <constraint firstAttribute="height" constant="44" id="xwI-uS-Q4q"/>
                                 </constraints>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
@@ -64,6 +64,14 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iTf-e2-g8k">
+                                <rect key="frame" x="347" y="779" width="46" height="35"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="35" id="KqM-8i-QqZ"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="mic" catalog="system"/>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -74,17 +82,21 @@
                             <constraint firstItem="iS3-ZL-WKu" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="8Tv-fd-6Mh"/>
                             <constraint firstItem="meO-t5-dES" firstAttribute="leading" secondItem="hbD-ZX-qj5" secondAttribute="leading" id="BgA-RN-6cq"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="f1r-8Q-bbA" secondAttribute="trailing" constant="252" id="Bk6-bb-SI6"/>
-                            <constraint firstItem="HM7-Db-mrz" firstAttribute="top" secondItem="hbD-ZX-qj5" secondAttribute="bottom" id="IpX-QQ-esO"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="HM7-Db-mrz" secondAttribute="trailing" constant="37" id="CEI-46-fKe"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="iTf-e2-g8k" secondAttribute="bottom" constant="4" id="FAP-li-03g"/>
+                            <constraint firstItem="HM7-Db-mrz" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="M4J-xm-NSu"/>
+                            <constraint firstItem="iTf-e2-g8k" firstAttribute="trailing" secondItem="hbD-ZX-qj5" secondAttribute="trailing" id="Prq-bv-KIl"/>
                             <constraint firstItem="HZt-Xf-hGC" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="f1r-8Q-bbA" secondAttribute="leading" id="QhP-5A-YeF"/>
                             <constraint firstItem="iS3-ZL-WKu" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="bdt-7J-S6x"/>
+                            <constraint firstItem="HM7-Db-mrz" firstAttribute="top" secondItem="hbD-ZX-qj5" secondAttribute="bottom" id="bqW-W3-9rH"/>
                             <constraint firstItem="meO-t5-dES" firstAttribute="trailing" secondItem="hbD-ZX-qj5" secondAttribute="trailing" id="csO-XR-kza"/>
                             <constraint firstItem="hbD-ZX-qj5" firstAttribute="top" secondItem="f1r-8Q-bbA" secondAttribute="bottom" constant="8" id="dvk-fZ-vjX"/>
-                            <constraint firstItem="HM7-Db-mrz" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="f9G-8C-rva"/>
+                            <constraint firstItem="iTf-e2-g8k" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6Tk-OE-BBY" secondAttribute="leading" symbolic="YES" id="gHz-D4-NOt"/>
                             <constraint firstItem="iS3-ZL-WKu" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="kBi-o6-apF"/>
+                            <constraint firstItem="iTf-e2-g8k" firstAttribute="top" secondItem="hbD-ZX-qj5" secondAttribute="bottom" constant="5" id="pBi-Zb-27H"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="HZt-Xf-hGC" secondAttribute="trailing" constant="300" id="rx0-20-oCa"/>
-                            <constraint firstItem="iS3-ZL-WKu" firstAttribute="trailing" secondItem="HM7-Db-mrz" secondAttribute="trailing" id="t1I-30-Fr2"/>
                             <constraint firstItem="f1r-8Q-bbA" firstAttribute="top" secondItem="meO-t5-dES" secondAttribute="bottom" constant="8" id="uUg-pS-ahv"/>
-                            <constraint firstItem="iS3-ZL-WKu" firstAttribute="leading" secondItem="HM7-Db-mrz" secondAttribute="leading" id="wTc-s7-5Zp"/>
+                            <constraint firstItem="HM7-Db-mrz" firstAttribute="leading" secondItem="hbD-ZX-qj5" secondAttribute="leading" id="xJd-ab-Dj6"/>
                             <constraint firstItem="HZt-Xf-hGC" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="yb1-gm-b9p"/>
                             <constraint firstItem="meO-t5-dES" firstAttribute="leading" secondItem="iS3-ZL-WKu" secondAttribute="leading" id="zWY-Vu-4BM"/>
                         </constraints>
@@ -102,6 +114,7 @@
     </scenes>
     <resources>
         <image name="list.bullet" catalog="system" width="128" height="87"/>
+        <image name="mic" catalog="system" width="110" height="128"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
