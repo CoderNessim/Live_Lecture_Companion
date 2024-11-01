@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		542568032CD5307100B141CE /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542568022CD5307100B141CE /* HistoryViewController.swift */; };
 		5436152F2CCC86860063BB7F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5436152E2CCC86860063BB7F /* AppDelegate.swift */; };
 		543615312CCC86860063BB7F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 543615302CCC86860063BB7F /* SceneDelegate.swift */; };
 		543615332CCC86860063BB7F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 543615322CCC86860063BB7F /* ViewController.swift */; };
@@ -18,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		542568022CD5307100B141CE /* HistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewController.swift; sourceTree = "<group>"; };
 		5436152B2CCC86860063BB7F /* FinalProject-CSE438.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FinalProject-CSE438.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5436152E2CCC86860063BB7F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		543615302CCC86860063BB7F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -65,6 +67,7 @@
 				543615322CCC86860063BB7F /* ViewController.swift */,
 				546129B82CD2901C00098578 /* ChatBubbleCell.swift */,
 				543615342CCC86860063BB7F /* Main.storyboard */,
+				542568022CD5307100B141CE /* HistoryViewController.swift */,
 				5436153A2CCC86880063BB7F /* Assets.xcassets */,
 				5436153C2CCC86880063BB7F /* LaunchScreen.storyboard */,
 				5436153F2CCC86880063BB7F /* Info.plist */,
@@ -147,6 +150,7 @@
 				543615392CCC86860063BB7F /* FinalProject_CSE438.xcdatamodeld in Sources */,
 				546129B92CD2901C00098578 /* ChatBubbleCell.swift in Sources */,
 				543615332CCC86860063BB7F /* ViewController.swift in Sources */,
+				542568032CD5307100B141CE /* HistoryViewController.swift in Sources */,
 				5436152F2CCC86860063BB7F /* AppDelegate.swift in Sources */,
 				543615312CCC86860063BB7F /* SceneDelegate.swift in Sources */,
 			);
