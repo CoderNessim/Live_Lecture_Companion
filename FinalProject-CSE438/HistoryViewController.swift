@@ -38,7 +38,7 @@ class HistoryViewController: UIViewController {
         
         // Enable default separators
         tableView.separatorStyle = .singleLine
-        tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0)
         
         tableView.selectionFollowsFocus = false
         
@@ -47,21 +47,19 @@ class HistoryViewController: UIViewController {
     }
     
     private func setupSearchField() {
-            searchField.delegate = self
-            searchField.placeholder = "Search"
-            searchField.layer.cornerRadius = 10
-            searchField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: searchField.frame.height))
-            searchField.leftViewMode = .always
-            searchField.addTarget(self, action: #selector(searchFieldDidChange), for: .editingChanged)
-        }
+        searchField.delegate = self
+        searchField.placeholder = "Search"
+        searchField.layer.cornerRadius = 16
+        searchField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: searchField.frame.height))
+        searchField.leftViewMode = .always
+        searchField.addTarget(self, action: #selector(searchFieldDidChange), for: .editingChanged)
+    }
     
     private func populateMockData() {
-        let cse542Chats = [
+        let cse517Chats = [
             "Machine Learning Algorithms",
             "Neural Networks",
             "Deep Learning Models",
-            "Final Project Discussion",
-            "Homework 3 Questions"
         ]
         
         let cse438Chats = [
@@ -71,10 +69,15 @@ class HistoryViewController: UIViewController {
             "Database Integration",
             "UI Design Questions"
         ]
+
+        let cse542Chats = [
+            "Rust traits and generics"
+        ]
         
         allChatGroups = [
+            ChatGroup(courseName: "CSE517", chatTitles: cse517Chats),
+            ChatGroup(courseName: "CSE438", chatTitles: cse438Chats),
             ChatGroup(courseName: "CSE542", chatTitles: cse542Chats),
-            ChatGroup(courseName: "CSE438", chatTitles: cse438Chats)
         ]
         
         filteredChatGroups = allChatGroups
@@ -103,56 +106,59 @@ class HistoryViewController: UIViewController {
 // MARK: - UITableViewDelegate & UITableViewDataSource
 extension HistoryViewController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-            return filteredChatGroups.count
+        return filteredChatGroups.count
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return filteredChatGroups[section].chatTitles.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ChatCell", for: indexPath)
+        let chatTitle = filteredChatGroups[indexPath.section].chatTitles[indexPath.row]
+        
+        // Configure cell
+        var content = cell.defaultContentConfiguration()
+        content.text = chatTitle
+        content.textProperties.font = .systemFont(ofSize: 16)
+        content.textProperties.color = .label
+        
+        content.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 12, leading: 0, bottom: 12, trailing: 0)
+        
+        cell.contentConfiguration = content
+        cell.selectionStyle = .none
+        cell.backgroundColor = .clear
+        
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "HeaderView")
+        var content = UIListContentConfiguration.groupedHeader()
+        content.text = filteredChatGroups[section].courseName
+        content.textProperties.font = .systemFont(ofSize: 16, weight: .semibold)
+        content.textProperties.color = .label
+        
+        if section == 0 {
+            content.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 12, trailing: 0)
+        } else {
+            content.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 12, trailing: 0)
         }
         
-        func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            return filteredChatGroups[section].chatTitles.count
-        }
+        headerView?.contentConfiguration = content
+        headerView?.backgroundConfiguration = .clear()
         
-        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "ChatCell", for: indexPath)
-            let chatTitle = filteredChatGroups[indexPath.section].chatTitles[indexPath.row]
-            
-            // Configure cell
-            var content = cell.defaultContentConfiguration()
-            content.text = chatTitle
-            content.textProperties.font = .systemFont(ofSize: 16)
-            content.textProperties.color = .label
-            
-            content.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16)
-            
-            cell.contentConfiguration = content
-            cell.selectionStyle = .none
-            cell.backgroundColor = .clear
-            
-            return cell
-        }
+        return headerView
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         
-        func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-            let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "HeaderView")
-            var content = UIListContentConfiguration.groupedHeader()
-            content.text = filteredChatGroups[section].courseName
-            content.textProperties.font = .systemFont(ofSize: 16, weight: .semibold)
-            content.textProperties.color = .label
-            
-            // Adjust margins to match cell spacing
-            content.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16)
-            
-            headerView?.contentConfiguration = content
-            headerView?.backgroundConfiguration = .clear()
-            
-            return headerView
+        // TODO
+        if let mainVC = storyboard?.instantiateViewController(withIdentifier: "ChatViewController") as? ChatViewController {
+            navigationController?.pushViewController(mainVC, animated: true)
         }
-        
-        func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-            tableView.deselectRow(at: indexPath, animated: true)
-            
-            // TODO
-            if let mainVC = storyboard?.instantiateViewController(withIdentifier: "ChatViewController") as? ChatViewController {
-                navigationController?.pushViewController(mainVC, animated: true)
-            }
-        }
+    }
 }
 
 // MARK: - UITextFieldDelegate

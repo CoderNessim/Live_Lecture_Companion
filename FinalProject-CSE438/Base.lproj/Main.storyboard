@@ -103,11 +103,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="2Io-RQ-4lZ">
-                                <rect key="frame" x="0.0" y="98" width="393" height="720"/>
+                                <rect key="frame" x="0.0" y="98" width="373" height="720"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Search" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="BJ4-7L-UWv">
-                                <rect key="frame" x="16" y="64" width="361" height="34"/>
+                                <rect key="frame" x="18" y="64" width="357" height="34"/>
                                 <color key="backgroundColor" systemColor="systemGray6Color"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <textInputTraits key="textInputTraits"/>
@@ -117,12 +117,12 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="2Io-RQ-4lZ" firstAttribute="top" secondItem="BJ4-7L-UWv" secondAttribute="bottom" id="1V4-vS-drM"/>
-                            <constraint firstItem="2Io-RQ-4lZ" firstAttribute="trailing" secondItem="5zb-XJ-tAV" secondAttribute="trailing" id="BMh-MU-4a9"/>
                             <constraint firstItem="BJ4-7L-UWv" firstAttribute="top" secondItem="5zb-XJ-tAV" secondAttribute="top" constant="5" id="Eul-qs-im6"/>
                             <constraint firstItem="2Io-RQ-4lZ" firstAttribute="top" secondItem="BJ4-7L-UWv" secondAttribute="bottom" id="GRa-Ny-zyD"/>
-                            <constraint firstItem="5zb-XJ-tAV" firstAttribute="trailing" secondItem="BJ4-7L-UWv" secondAttribute="trailing" constant="16" id="OBZ-PE-bnf"/>
-                            <constraint firstItem="2Io-RQ-4lZ" firstAttribute="leading" secondItem="5zb-XJ-tAV" secondAttribute="leading" id="mOp-9I-lNm"/>
-                            <constraint firstItem="BJ4-7L-UWv" firstAttribute="leading" secondItem="5zb-XJ-tAV" secondAttribute="leading" constant="16" id="sZw-Os-ylS"/>
+                            <constraint firstItem="5zb-XJ-tAV" firstAttribute="trailing" secondItem="BJ4-7L-UWv" secondAttribute="trailing" constant="18" id="OBZ-PE-bnf"/>
+                            <constraint firstItem="2Io-RQ-4lZ" firstAttribute="leading" secondItem="5zb-XJ-tAV" secondAttribute="leading" id="WgX-H2-5i8"/>
+                            <constraint firstItem="5zb-XJ-tAV" firstAttribute="trailing" secondItem="2Io-RQ-4lZ" secondAttribute="trailing" constant="20" id="g8Z-13-ZNj"/>
+                            <constraint firstItem="BJ4-7L-UWv" firstAttribute="leading" secondItem="5zb-XJ-tAV" secondAttribute="leading" constant="18" id="sZw-Os-ylS"/>
                             <constraint firstItem="2Io-RQ-4lZ" firstAttribute="bottom" secondItem="5zb-XJ-tAV" secondAttribute="bottom" id="yPb-if-ldi"/>
                         </constraints>
                     </view>
