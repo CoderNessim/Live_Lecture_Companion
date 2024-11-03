@@ -36,7 +36,11 @@
                                     <navigationItem id="0IG-qU-PRd">
                                         <rightBarButtonItems>
                                             <barButtonItem id="0Uz-Mm-B3s"/>
-                                            <barButtonItem image="book" catalog="system" id="1i0-nS-0wz"/>
+                                            <barButtonItem image="book" catalog="system" id="1i0-nS-0wz">
+                                                <connections>
+                                                    <action selector="historyButtonTapped:" destination="BYZ-38-t0r" id="fSr-tq-PmX"/>
+                                                </connections>
+                                            </barButtonItem>
                                         </rightBarButtonItems>
                                     </navigationItem>
                                 </items>

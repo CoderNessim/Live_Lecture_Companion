@@ -29,7 +29,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
-                        
+        self.navigationItem.hidesBackButton = true
+
         // Create a UILabel for the left title
         let titleLabel = UILabel()
         titleLabel.text = "Live Lecture Companion"
@@ -56,6 +57,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         modelThoughtsTableView.allowsSelection = false
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.setNavigationBarHidden(false, animated: animated)
+    }
+
+    
     // MARK: - UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == transcriptTableView {
@@ -81,4 +93,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         return cell
     }
+    
+    @IBAction func historyButtonTapped(_ sender: Any) {
+        navigationController?.popViewController(animated: true)
+
+    }
+    
 }
