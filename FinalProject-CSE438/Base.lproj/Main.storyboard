@@ -131,6 +131,9 @@
                                 <rect key="frame" x="346" y="102" width="47" height="34"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="plus" catalog="system"/>
+                                <connections>
+                                    <action selector="createChatButtonPressed:" destination="Ez4-rs-lZS" eventType="touchUpInside" id="gEQ-iS-sQP"/>
+                                </connections>
                             </button>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Search" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ovk-fp-sWW">
                                 <rect key="frame" x="16" y="103" width="333" height="34"/>

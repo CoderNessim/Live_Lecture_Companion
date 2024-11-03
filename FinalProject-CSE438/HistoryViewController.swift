@@ -71,6 +71,18 @@ class HistoryViewController: UIViewController {
         filteredChats = allChats
     }
     
+    @IBAction func createChatButtonPressed(_ sender: Any) {
+        let newChat = Chat(title: "Chat \(allChats.count + 1)")
+        allChats.append(newChat)
+            
+        if !isSearching {
+            filteredChats = allChats
+        }
+            
+        tableView.reloadData()
+    }
+    
+    
     @objc private func searchFieldDidChange() {
         guard let searchText = searchField.text?.lowercased(), !searchText.isEmpty else {
             isSearching = false
