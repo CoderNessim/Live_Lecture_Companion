@@ -100,6 +100,40 @@ class HistoryViewController: UIViewController {
         
         tableView.reloadData()
     }
+    
+    // Enable row deletion in the table view
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            // Get the course and title to delete
+            let courseName = filteredChatGroups[indexPath.section].courseName
+            let titleToDelete = filteredChatGroups[indexPath.section].chatTitles[indexPath.row]
+            
+            // Find the index of the course in allChatGroups
+            if let groupIndex = allChatGroups.firstIndex(where: { $0.courseName == courseName }) {
+                // Remove the title from the main data source (allChatGroups)
+                if let titleIndex = allChatGroups[groupIndex].chatTitles.firstIndex(of: titleToDelete) {
+                    allChatGroups[groupIndex].chatTitles.remove(at: titleIndex)
+                    
+                    // If a course has no titles left, remove it from allChatGroups
+                    if allChatGroups[groupIndex].chatTitles.isEmpty {
+                        allChatGroups.remove(at: groupIndex)
+                    }
+                }
+            }
+            
+            // Update the filtered data source
+            filteredChatGroups[indexPath.section].chatTitles.remove(at: indexPath.row)
+            
+            // If a course in filteredChatGroups has no titles left, remove the entire course section
+            if filteredChatGroups[indexPath.section].chatTitles.isEmpty {
+                filteredChatGroups.remove(at: indexPath.section)
+                tableView.deleteSections(IndexSet(integer: indexPath.section), with: .fade)
+            } else {
+                tableView.deleteRows(at: [indexPath], with: .fade)
+            }
+        }
+    }
+
 }
 
 // MARK: - UITableViewDelegate & UITableViewDataSource
