@@ -23,11 +23,19 @@ class HistoryViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupTableView()
         setupSearchField()
         populateMockData()
+        
+        // Add an edit button to toggle editing mode
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(toggleEditingMode))
     }
+
+    @objc private func toggleEditingMode() {
+        tableView.setEditing(!tableView.isEditing, animated: true)
+        navigationItem.rightBarButtonItem?.title = tableView.isEditing ? "Done" : "Edit"
+    }
+
     
     private func setupTableView() {
         tableView.delegate = self
