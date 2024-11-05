@@ -23,6 +23,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         ("Sure thing, I will.", false)
     ] // (message, isFromUser)
     
+    // TODO: Make core data model for this
     private var modelThoughtsMessages: [(String, Bool)] = [
         // ("The concept being discussed now is crucial for understanding the next topic.", false),
         // ("Got it, I will pay extra attention.", true),
