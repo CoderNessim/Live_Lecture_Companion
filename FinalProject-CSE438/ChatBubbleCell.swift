@@ -9,6 +9,9 @@
 import UIKit
 
 class ChatBubbleCell: UITableViewCell {
+    // Add this property
+    private var isFromUser: Bool = false
+    
     // MARK: - UI Elements
     let bubbleBackgroundView: UIView = {
         let view = UIView()
@@ -37,48 +40,55 @@ class ChatBubbleCell: UITableViewCell {
     
     // MARK: - Setup Views
     private func setupViews() {
+        backgroundColor = .clear
+        contentView.backgroundColor = .clear
+        
         contentView.addSubview(bubbleBackgroundView)
-        contentView.addSubview(messageLabel)
+        bubbleBackgroundView.addSubview(messageLabel)
+        
+        NSLayoutConstraint.activate([
+            // Bubble base constraints
+            bubbleBackgroundView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            bubbleBackgroundView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
+            bubbleBackgroundView.widthAnchor.constraint(lessThanOrEqualToConstant: 300),
+            bubbleBackgroundView.widthAnchor.constraint(greaterThanOrEqualToConstant: 60),
+            
+            // Message label constraints
+            messageLabel.topAnchor.constraint(equalTo: bubbleBackgroundView.topAnchor, constant: 8),
+            messageLabel.leadingAnchor.constraint(equalTo: bubbleBackgroundView.leadingAnchor, constant: 8),
+            messageLabel.trailingAnchor.constraint(equalTo: bubbleBackgroundView.trailingAnchor, constant: -8),
+            messageLabel.bottomAnchor.constraint(equalTo: bubbleBackgroundView.bottomAnchor, constant: -8)
+        ])
     }
     
     func configure(with message: String, isFromUser: Bool) {
+        self.isFromUser = isFromUser
         messageLabel.text = message
-        bubbleBackgroundView.backgroundColor = isFromUser ? UIColor.systemBlue : UIColor.lightGray
-        messageLabel.textColor = isFromUser ? UIColor.white : UIColor.black
         
-        // Update layout based on message sender
-        let bubbleConstraints = isFromUser ? setupUserBubbleConstraints() : setupBotBubbleConstraints()
-        NSLayoutConstraint.activate(bubbleConstraints)
-    }
-    
-    // MARK: - Layout Constraints
-    private func setupUserBubbleConstraints() -> [NSLayoutConstraint] {
-        // Pin the bubble to the right for user messages
-        return [
-            bubbleBackgroundView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            bubbleBackgroundView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            bubbleBackgroundView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
-            bubbleBackgroundView.widthAnchor.constraint(lessThanOrEqualToConstant: 250),
-            
-            messageLabel.topAnchor.constraint(equalTo: bubbleBackgroundView.topAnchor, constant: 8),
-            messageLabel.leadingAnchor.constraint(equalTo: bubbleBackgroundView.leadingAnchor, constant: 8),
-            messageLabel.bottomAnchor.constraint(equalTo: bubbleBackgroundView.bottomAnchor, constant: -8),
-            messageLabel.trailingAnchor.constraint(equalTo: bubbleBackgroundView.trailingAnchor, constant: -8)
-        ]
-    }
-    
-    private func setupBotBubbleConstraints() -> [NSLayoutConstraint] {
-        // Pin the bubble to the left for bot messages
-        return [
-            bubbleBackgroundView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            bubbleBackgroundView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            bubbleBackgroundView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
-            bubbleBackgroundView.widthAnchor.constraint(lessThanOrEqualToConstant: 250),
-            
-            messageLabel.topAnchor.constraint(equalTo: bubbleBackgroundView.topAnchor, constant: 8),
-            messageLabel.leadingAnchor.constraint(equalTo: bubbleBackgroundView.leadingAnchor, constant: 8),
-            messageLabel.bottomAnchor.constraint(equalTo: bubbleBackgroundView.bottomAnchor, constant: -8),
-            messageLabel.trailingAnchor.constraint(equalTo: bubbleBackgroundView.trailingAnchor, constant: -8)
-        ]
+        bubbleBackgroundView.backgroundColor = isFromUser ? .systemBlue : .systemGray5
+        messageLabel.textColor = isFromUser ? .white : .label
+        
+        // Only remove and update the leading/trailing constraints
+        contentView.constraints.forEach { constraint in
+            if constraint.firstItem === bubbleBackgroundView &&
+               (constraint.firstAttribute == .leading || constraint.firstAttribute == .trailing) {
+                constraint.isActive = false
+            }
+        }
+        
+        // Update width constraint
+        bubbleBackgroundView.constraints.forEach { constraint in
+            if constraint.firstAttribute == .width && constraint.relation == .lessThanOrEqual {
+                constraint.constant = isFromUser ? 250 : 300
+            }
+        }
+        
+        if isFromUser {
+            bubbleBackgroundView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16).isActive = true
+            bubbleBackgroundView.leadingAnchor.constraint(greaterThanOrEqualTo: contentView.leadingAnchor, constant: 80).isActive = true
+        } else {
+            bubbleBackgroundView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16).isActive = true
+            bubbleBackgroundView.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -40).isActive = true
+        }
     }
 }
