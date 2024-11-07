@@ -82,4 +82,13 @@ class ChatManager {
             print("Error deleting chat: \(error)")
         }
     }
+    
+    func setTitle(_ chat: Chat, title: String) {
+        chat.title = title
+        do {
+            try context.save()
+        } catch {
+            print("Error changing chat name: \(error)")
+        }
+    }
 }

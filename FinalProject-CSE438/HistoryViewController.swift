@@ -7,7 +7,6 @@
 
 import UIKit
 
-
 class HistoryViewController: UIViewController {
     
     @IBOutlet weak var searchField: UITextField!
@@ -31,7 +30,6 @@ class HistoryViewController: UIViewController {
         tableView.setEditing(!tableView.isEditing, animated: true)
         navigationItem.rightBarButtonItem?.title = tableView.isEditing ? "Done" : "Edit"
     }
-    
     
     private func setupTableView() {
         tableView.delegate = self
@@ -73,7 +71,6 @@ class HistoryViewController: UIViewController {
         }
     }
     
-    
     @objc private func searchFieldDidChange() {
         guard let searchText = searchField.text?.lowercased(), !searchText.isEmpty else {
             isSearching = false
@@ -112,7 +109,7 @@ class HistoryViewController: UIViewController {
 extension HistoryViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1  // Only one section for "All Chats"
+        return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -121,9 +118,9 @@ extension HistoryViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ChatCell", for: indexPath)
-        let chatTitle = filteredChats[indexPath.row].title
+        let chat = filteredChats[indexPath.row]
+        let chatTitle = chat.title
         
-        // Configure cell
         var content = cell.defaultContentConfiguration()
         content.text = chatTitle
         content.textProperties.font = .systemFont(ofSize: 16)
@@ -133,8 +130,41 @@ extension HistoryViewController: UITableViewDelegate, UITableViewDataSource {
         cell.contentConfiguration = content
         cell.selectionStyle = .none
         cell.backgroundColor = .clear
-        
+
+        let pencilIcon = UIImage(systemName: "pencil")
+        let accessoryImageView = UIImageView(image: pencilIcon)
+//        accessoryImageView.tintColor = .systemGray
+        accessoryImageView.isUserInteractionEnabled = true
+        accessoryImageView.tag = indexPath.row
+
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapPencilIcon(_:)))
+        accessoryImageView.addGestureRecognizer(tapGesture)
+        cell.accessoryView = accessoryImageView
+
         return cell
+    }
+
+    @objc private func didTapPencilIcon(_ sender: UITapGestureRecognizer) {
+        guard let index = sender.view?.tag else { return }
+        let chat = filteredChats[index]
+
+        let alert = UIAlertController(title: "Edit Chat Name", message: "Enter a new name for your chat", preferredStyle: .alert)
+        alert.addTextField { textField in
+            textField.text = chat.title
+        }
+        
+        let saveAction = UIAlertAction(title: "Save", style: .default) { [weak self] _ in
+            if let newName = alert.textFields?.first?.text, !newName.isEmpty {
+                ChatManager.shared.setTitle(chat, title: newName)
+                self?.loadChats()
+            }
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alert.addAction(saveAction)
+        alert.addAction(cancelAction)
+        
+        present(alert, animated: true, completion: nil)
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
