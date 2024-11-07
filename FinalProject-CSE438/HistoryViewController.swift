@@ -7,10 +7,6 @@
 
 import UIKit
 
-// MARK: - Data Models
-struct Chat {
-    let title: String
-}
 
 class HistoryViewController: UIViewController {
     
@@ -25,17 +21,17 @@ class HistoryViewController: UIViewController {
         super.viewDidLoad()
         setupTableView()
         setupSearchField()
-        populateMockData()
+        loadChats()
         
         // Add an edit button to toggle editing mode
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(toggleEditingMode))
     }
-
+    
     @objc private func toggleEditingMode() {
         tableView.setEditing(!tableView.isEditing, animated: true)
         navigationItem.rightBarButtonItem?.title = tableView.isEditing ? "Done" : "Edit"
     }
-
+    
     
     private func setupTableView() {
         tableView.delegate = self
@@ -61,33 +57,20 @@ class HistoryViewController: UIViewController {
         searchField.addTarget(self, action: #selector(searchFieldDidChange), for: .editingChanged)
     }
     
-    private func populateMockData() {
-        let chatTitles = [
-            "Machine Learning Algorithms",
-            "Neural Networks",
-            "Deep Learning Models",
-            "Final Project Discussion",
-            "Homework 3 Questions",
-            "iOS Development Basics",
-            "UIKit Tutorial",
-            "App Navigation Flow",
-            "Database Integration",
-            "UI Design Questions"
-        ]
-        
-        allChats = chatTitles.map { Chat(title: $0) }
+    private func loadChats() {
+        allChats = ChatManager.shared.fetchAllChats()
         filteredChats = allChats
+        tableView.reloadData()
     }
     
     @IBAction func createChatButtonPressed(_ sender: Any) {
-        let newChat = Chat(title: "Chat \(allChats.count + 1)")
-        allChats.append(newChat)
-            
-        if !isSearching {
-            filteredChats = allChats
+        if let chat = ChatManager.shared.createChat(title: "Chat \(allChats.count + 1)") {
+            allChats.insert(chat, at: 0)
+            if !isSearching {
+                filteredChats = allChats
+            }
+            tableView.reloadData()
         }
-            
-        tableView.reloadData()
     }
     
     
@@ -100,7 +83,7 @@ class HistoryViewController: UIViewController {
         }
         
         isSearching = true
-        filteredChats = allChats.filter { $0.title.lowercased().contains(searchText) }
+        filteredChats = allChats.filter { $0.title?.lowercased().contains(searchText) ?? false }
         
         tableView.reloadData()
     }
@@ -108,11 +91,13 @@ class HistoryViewController: UIViewController {
     // Enable row deletion in the table view
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            // Remove chat from both filtered and allChats
-            let titleToDelete = filteredChats[indexPath.row].title
+            let chatToDelete = filteredChats[indexPath.row]
+            
+            // Delete from Core Data using ChatManager
+            ChatManager.shared.deleteChat(chatToDelete)
             
             // Remove from allChats
-            if let indexInAllChats = allChats.firstIndex(where: { $0.title == titleToDelete }) {
+            if let indexInAllChats = allChats.firstIndex(where: { $0.title == chatToDelete.title }) {
                 allChats.remove(at: indexInAllChats)
             }
             
@@ -158,7 +143,7 @@ extension HistoryViewController: UITableViewDelegate, UITableViewDataSource {
         content.text = "All Chats"  // Set the title as "All Chats"
         content.textProperties.font = .systemFont(ofSize: 16, weight: .semibold)
         content.textProperties.color = .label
-        content.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16)
+        content.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 6, leading: 16, bottom: 12, trailing: 16)
         
         headerView?.contentConfiguration = content
         headerView?.backgroundConfiguration = .clear()
@@ -169,8 +154,8 @@ extension HistoryViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        // TODO: Navigate to a new view controller
         if let mainVC = storyboard?.instantiateViewController(withIdentifier: "ViewController") as? ViewController {
+            mainVC.currentChat = filteredChats[indexPath.row]
             navigationController?.pushViewController(mainVC, animated: true)
         }
     }
