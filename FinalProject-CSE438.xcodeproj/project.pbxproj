@@ -16,6 +16,7 @@
 		5436153B2CCC86880063BB7F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5436153A2CCC86880063BB7F /* Assets.xcassets */; };
 		5436153E2CCC86880063BB7F /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 5436153D2CCC86880063BB7F /* Base */; };
 		546129B92CD2901C00098578 /* ChatBubbleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546129B82CD2901C00098578 /* ChatBubbleCell.swift */; };
+		AF50AB902CDC499C00AB4B30 /* ChatManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF50AB8F2CDC499C00AB4B30 /* ChatManager.swift */; };
 		AF6A2BE02CDAA7200088F247 /* APICaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6A2BDF2CDAA7200088F247 /* APICaller.swift */; };
 /* End PBXBuildFile section */
 
@@ -31,6 +32,7 @@
 		5436153D2CCC86880063BB7F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5436153F2CCC86880063BB7F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		546129B82CD2901C00098578 /* ChatBubbleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatBubbleCell.swift; sourceTree = "<group>"; };
+		AF50AB8F2CDC499C00AB4B30 /* ChatManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatManager.swift; sourceTree = "<group>"; };
 		AF6A2BDF2CDAA7200088F247 /* APICaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APICaller.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -75,6 +77,7 @@
 				5436153F2CCC86880063BB7F /* Info.plist */,
 				543615372CCC86860063BB7F /* FinalProject_CSE438.xcdatamodeld */,
 				AF6A2BDF2CDAA7200088F247 /* APICaller.swift */,
+				AF50AB8F2CDC499C00AB4B30 /* ChatManager.swift */,
 			);
 			path = "FinalProject-CSE438";
 			sourceTree = "<group>";
@@ -161,6 +164,7 @@
 				542568032CD5307100B141CE /* HistoryViewController.swift in Sources */,
 				5436152F2CCC86860063BB7F /* AppDelegate.swift in Sources */,
 				543615312CCC86860063BB7F /* SceneDelegate.swift in Sources */,
+				AF50AB902CDC499C00AB4B30 /* ChatManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

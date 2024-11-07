@@ -12,10 +12,10 @@ struct OpenAIResponse: Codable {
 }
 
 struct Choice: Codable {
-    let message: Message
+    let message: APIMessage
 }
 
-struct Message: Codable {
+struct APIMessage: Codable {
     let content: String
 }
 

@@ -16,19 +16,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     @IBOutlet weak var textField: UITextField!
     
-    var transcriptMessages: [(String, Bool)] = [
-        ("Welcome to the live lecture!", false),
-        ("Thank you! Excited to be here.", false),
-        ("Please let me know if you have any questions during the lecture.", false),
-        ("Sure thing, I will.", false)
-    ] // (message, isFromUser)
+    var transcriptMessages: [(String, Bool)] = [] // (message, isFromUser)
     
-    // TODO: Make core data model for this
-    private var modelThoughtsMessages: [(String, Bool)] = [
-        // ("The concept being discussed now is crucial for understanding the next topic.", false),
-        // ("Got it, I will pay extra attention.", true),
-        // ("Notice how the example relates back to the previous lecture.", false)
-    ] // (message, isFromUser)
+    private var modelThoughtsMessages: [(String, Bool)] = [] // (message, isFromUser)
+    
+    var currentChat: Chat?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -71,6 +63,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         modelThoughtsTableView.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
 
         textField.delegate = self
+
+        loadMessages()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -127,25 +121,27 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if let text = textField.text, !text.isEmpty {
+        if let text = textField.text, !text.isEmpty, let chat = currentChat {
+            ChatManager.shared.saveMessage(content: text, isFromUser: true, isTranscript: false, chat: chat)
             modelThoughtsMessages.append((text, true))
-            textField.text = "" 
+            textField.text = ""
             
-            // Scroll to bottom immediately after adding user message
             modelThoughtsTableView.reloadData()
             scrollToBottom(tableView: modelThoughtsTableView)
             
-            // Make API call
             APICaller.shared.getResponse(input: text) { [weak self] result in
                 guard let self = self else { return }
                 
                 DispatchQueue.main.async {
                     switch result {
                     case .success(let output):
+                        ChatManager.shared.saveMessage(content: output, isFromUser: false, isTranscript: false, chat: chat)
                         self.modelThoughtsMessages.append((output, false))
                     case .failure(let error):
                         print("Error:", error)
-                        self.modelThoughtsMessages.append(("Sorry, I couldn't process that request.", false))
+                        let errorMessage = "Sorry, I couldn't process that request."
+                        ChatManager.shared.saveMessage(content: errorMessage, isFromUser: false, isTranscript: false, chat: chat)
+                        self.modelThoughtsMessages.append((errorMessage, false))
                     }
                     
                     self.modelThoughtsTableView.reloadData()
@@ -160,6 +156,20 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     @IBAction func historyButtonTapped(_ sender: Any) {
         navigationController?.popViewController(animated: true)
 
+    }
+    
+    // Load messages from Core Data for the current chat
+    private func loadMessages() {
+        guard let chat = currentChat else { return }
+        
+        let transcriptMessages = ChatManager.shared.fetchMessages(for: chat, isTranscript: true)
+        let modelMessages = ChatManager.shared.fetchMessages(for: chat, isTranscript: false)
+        
+        self.transcriptMessages = transcriptMessages.map { ($0.content!, $0.isFromUser) }
+        self.modelThoughtsMessages = modelMessages.map { ($0.content!, $0.isFromUser) }
+        
+        transcriptTableView.reloadData()
+        modelThoughtsTableView.reloadData()
     }
     
 }
