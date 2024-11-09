@@ -22,7 +22,6 @@ class HistoryViewController: UIViewController {
         setupSearchField()
         loadChats()
         
-        // Add an edit button to toggle editing mode
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(toggleEditingMode))
     }
     
@@ -37,7 +36,6 @@ class HistoryViewController: UIViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "ChatCell")
         tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "HeaderView")
         
-        // Enable default separators
         tableView.separatorStyle = .singleLine
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         
@@ -85,20 +83,16 @@ class HistoryViewController: UIViewController {
         tableView.reloadData()
     }
     
-    // Enable row deletion in the table view
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let chatToDelete = filteredChats[indexPath.row]
             
-            // Delete from Core Data using ChatManager
             ChatManager.shared.deleteChat(chatToDelete)
             
-            // Remove from allChats
             if let indexInAllChats = allChats.firstIndex(where: { $0.title == chatToDelete.title }) {
                 allChats.remove(at: indexInAllChats)
             }
             
-            // Remove from filteredChats and update table view
             filteredChats.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
