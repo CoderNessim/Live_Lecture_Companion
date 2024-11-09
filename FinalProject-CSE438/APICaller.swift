@@ -27,7 +27,6 @@ final class APICaller {
     ]
     
     private enum Constants {
-        // Replace with your actual API key
         static let key = "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"
         static let endpoint = "https://api.openai.com/v1/chat/completions"
     }

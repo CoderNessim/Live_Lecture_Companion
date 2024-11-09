@@ -12,7 +12,6 @@ class ChatBubbleCell: UITableViewCell {
     // Add this property
     private var isFromUser: Bool = false
     
-    // MARK: - UI Elements
     let bubbleBackgroundView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -28,7 +27,6 @@ class ChatBubbleCell: UITableViewCell {
         return label
     }()
     
-    // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
@@ -38,7 +36,6 @@ class ChatBubbleCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Setup Views
     private func setupViews() {
         backgroundColor = .clear
         contentView.backgroundColor = .clear
@@ -47,13 +44,11 @@ class ChatBubbleCell: UITableViewCell {
         bubbleBackgroundView.addSubview(messageLabel)
         
         NSLayoutConstraint.activate([
-            // Bubble base constraints
             bubbleBackgroundView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             bubbleBackgroundView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
             bubbleBackgroundView.widthAnchor.constraint(lessThanOrEqualToConstant: 300),
             bubbleBackgroundView.widthAnchor.constraint(greaterThanOrEqualToConstant: 60),
             
-            // Message label constraints
             messageLabel.topAnchor.constraint(equalTo: bubbleBackgroundView.topAnchor, constant: 8),
             messageLabel.leadingAnchor.constraint(equalTo: bubbleBackgroundView.leadingAnchor, constant: 8),
             messageLabel.trailingAnchor.constraint(equalTo: bubbleBackgroundView.trailingAnchor, constant: -8),
@@ -68,7 +63,6 @@ class ChatBubbleCell: UITableViewCell {
         bubbleBackgroundView.backgroundColor = isFromUser ? .systemBlue : .systemGray5
         messageLabel.textColor = isFromUser ? .white : .label
         
-        // Only remove and update the leading/trailing constraints
         contentView.constraints.forEach { constraint in
             if constraint.firstItem === bubbleBackgroundView &&
                (constraint.firstAttribute == .leading || constraint.firstAttribute == .trailing) {
@@ -76,7 +70,6 @@ class ChatBubbleCell: UITableViewCell {
             }
         }
         
-        // Update width constraint
         bubbleBackgroundView.constraints.forEach { constraint in
             if constraint.firstAttribute == .width && constraint.relation == .lessThanOrEqual {
                 constraint.constant = isFromUser ? 250 : 300

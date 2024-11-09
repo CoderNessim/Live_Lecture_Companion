@@ -30,14 +30,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let titleLabel = UILabel()
         titleLabel.text = "Live Lecture Companion"
         titleLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
-        titleLabel.textColor = .white // Adjust text color to stand out on the gray background
+        titleLabel.textColor = .white
         titleLabel.sizeToFit()
         
-        // Set the label as the left bar button item
         let leftTitleItem = UIBarButtonItem(customView: titleLabel)
         navbar.leftBarButtonItem = leftTitleItem
         
-        // Register the ChatBubbleCell for both table views
         transcriptTableView.register(ChatBubbleCell.self, forCellReuseIdentifier: "ChatBubbleCell")
         modelThoughtsTableView.register(ChatBubbleCell.self, forCellReuseIdentifier: "ChatBubbleCell")
         
@@ -80,7 +78,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        // Scroll both table views to bottom initially
         scrollToBottom(tableView: transcriptTableView)
         scrollToBottom(tableView: modelThoughtsTableView)
     }
@@ -94,7 +91,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
 
     
-    // MARK: - UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == transcriptTableView {
             return transcriptMessages.count
@@ -158,7 +154,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     }
     
-    // Load messages from Core Data for the current chat
     private func loadMessages() {
         guard let chat = currentChat else { return }
         
