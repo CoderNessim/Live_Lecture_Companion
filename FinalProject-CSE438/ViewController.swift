@@ -22,6 +22,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     var currentChat: Chat?
     
+    // for live transcribing
+    let audioRecorder = AudioRecorder()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.hidesBackButton = true
@@ -63,6 +67,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         textField.delegate = self
 
         loadMessages()
+        
+        // recording functionality here.
+        audioRecorder.startRecording()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+            self.audioRecorder.stopRecording()
+            print("Recording test completed.")
+                    
+        }
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
