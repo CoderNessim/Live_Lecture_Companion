@@ -14,6 +14,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     @IBOutlet weak var transcriptTableView: UITableView!
     @IBOutlet weak var modelThoughtsTableView: UITableView!
     
+    @IBOutlet weak var microphone: UIButton!
     @IBOutlet weak var textField: UITextField!
     
     var transcriptMessages: [(String, Bool)] = [] // (message, isFromUser)
@@ -21,7 +22,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     private var modelThoughtsMessages: [(String, Bool)] = [] // (message, isFromUser)
     
     var currentChat: Chat?
-    
+    var isRecording: Bool = false
     // for live transcribing
     let audioRecorder = AudioRecorder()
     
@@ -69,13 +70,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         loadMessages()
         
         // recording functionality here.
-        audioRecorder.startRecording()
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
-            self.audioRecorder.stopRecording()
-            print("Recording test completed.")
-                    
-        }
+//        audioRecorder.startRecording()
+//        
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+//            self.audioRecorder.stopRecording()
+//            print("Recording test completed.")
+//                    
+//        }
         
     }
     
@@ -164,10 +165,25 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     @IBAction func historyButtonTapped(_ sender: Any) {
+        if isRecording {
+            audioRecorder.stopRecording()
+        }
         navigationController?.popViewController(animated: true)
 
     }
     
+    @IBAction func microphoneTapped(_ sender: Any) {
+        isRecording = !isRecording
+        let darkGreen = UIColor(red: 0.0, green: 0.5, blue: 0.0, alpha: 1.0)
+
+        if isRecording {
+            audioRecorder.startRecordingAudio()
+            microphone.tintColor = darkGreen
+        } else {
+            audioRecorder.stopRecording()
+            microphone.tintColor = .systemBlue
+        }
+    }
     private func loadMessages() {
         guard let chat = currentChat else { return }
         
