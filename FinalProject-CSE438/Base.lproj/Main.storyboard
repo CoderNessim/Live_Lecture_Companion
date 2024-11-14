@@ -126,8 +126,9 @@
                     </view>
                     <connections>
                         <outlet property="microphone" destination="iTf-e2-g8k" id="RUL-RQ-QlC"/>
-                        <outlet property="modelThoughtsTableView" destination="hbD-ZX-qj5" id="eSN-Cs-MQN"/>
+                        <outlet property="modelThoughtsTableView" destination="xde-l9-NxQ" id="eS5-gl-VzH"/>
                         <outlet property="navbar" destination="0IG-qU-PRd" id="avf-1H-4Er"/>
+                        <outlet property="questionAndAnswerTableView" destination="hbD-ZX-qj5" id="T9u-y5-f12"/>
                         <outlet property="textField" destination="cfj-gP-jdd" id="7A1-PJ-oEL"/>
                         <outlet property="transcriptTableView" destination="meO-t5-dES" id="rA8-UY-RO5"/>
                     </connections>
