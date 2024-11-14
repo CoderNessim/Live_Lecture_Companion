@@ -16,6 +16,9 @@
 		5436153B2CCC86880063BB7F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5436153A2CCC86880063BB7F /* Assets.xcassets */; };
 		5436153E2CCC86880063BB7F /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 5436153D2CCC86880063BB7F /* Base */; };
 		546129B92CD2901C00098578 /* ChatBubbleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546129B82CD2901C00098578 /* ChatBubbleCell.swift */; };
+		87658A842CE2BD0D004EA353 /* microphone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87658A832CE2BD0D004EA353 /* microphone.swift */; };
+		87658A872CE2CFB9004EA353 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 87658A862CE2CFB9004EA353 /* Algorithms */; };
+		87658A8A2CE2CFCD004EA353 /* VoiceRecorderKit in Frameworks */ = {isa = PBXBuildFile; productRef = 87658A892CE2CFCD004EA353 /* VoiceRecorderKit */; };
 		AF50AB902CDC499C00AB4B30 /* ChatManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF50AB8F2CDC499C00AB4B30 /* ChatManager.swift */; };
 		AF6A2BE02CDAA7200088F247 /* APICaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6A2BDF2CDAA7200088F247 /* APICaller.swift */; };
 /* End PBXBuildFile section */
@@ -32,6 +35,7 @@
 		5436153D2CCC86880063BB7F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5436153F2CCC86880063BB7F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		546129B82CD2901C00098578 /* ChatBubbleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatBubbleCell.swift; sourceTree = "<group>"; };
+		87658A832CE2BD0D004EA353 /* microphone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = microphone.swift; sourceTree = "<group>"; };
 		AF50AB8F2CDC499C00AB4B30 /* ChatManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatManager.swift; sourceTree = "<group>"; };
 		AF6A2BDF2CDAA7200088F247 /* APICaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APICaller.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -41,6 +45,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				87658A8A2CE2CFCD004EA353 /* VoiceRecorderKit in Frameworks */,
+				87658A872CE2CFB9004EA353 /* Algorithms in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +84,7 @@
 				543615372CCC86860063BB7F /* FinalProject_CSE438.xcdatamodeld */,
 				AF6A2BDF2CDAA7200088F247 /* APICaller.swift */,
 				AF50AB8F2CDC499C00AB4B30 /* ChatManager.swift */,
+				87658A832CE2BD0D004EA353 /* microphone.swift */,
 			);
 			path = "FinalProject-CSE438";
 			sourceTree = "<group>";
@@ -99,6 +106,8 @@
 			);
 			name = "FinalProject-CSE438";
 			packageProductDependencies = (
+				87658A862CE2CFB9004EA353 /* Algorithms */,
+				87658A892CE2CFCD004EA353 /* VoiceRecorderKit */,
 			);
 			productName = "FinalProject-CSE438";
 			productReference = 5436152B2CCC86860063BB7F /* FinalProject-CSE438.app */;
@@ -129,6 +138,8 @@
 			);
 			mainGroup = 543615222CCC86860063BB7F;
 			packageReferences = (
+				87658A852CE2CFB9004EA353 /* XCRemoteSwiftPackageReference "swift-algorithms" */,
+				87658A882CE2CFCD004EA353 /* XCRemoteSwiftPackageReference "VoiceRecorderKit" */,
 			);
 			productRefGroup = 5436152C2CCC86860063BB7F /* Products */;
 			projectDirPath = "";
@@ -163,6 +174,7 @@
 				AF6A2BE02CDAA7200088F247 /* APICaller.swift in Sources */,
 				542568032CD5307100B141CE /* HistoryViewController.swift in Sources */,
 				5436152F2CCC86860063BB7F /* AppDelegate.swift in Sources */,
+				87658A842CE2BD0D004EA353 /* microphone.swift in Sources */,
 				543615312CCC86860063BB7F /* SceneDelegate.swift in Sources */,
 				AF50AB902CDC499C00AB4B30 /* ChatManager.swift in Sources */,
 			);
@@ -316,7 +328,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 856AYF3HHU;
+				DEVELOPMENT_TEAM = 3WPXSLBF36;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "FinalProject-CSE438/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -344,7 +356,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 856AYF3HHU;
+				DEVELOPMENT_TEAM = 3WPXSLBF36;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "FinalProject-CSE438/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -387,6 +399,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		87658A852CE2CFB9004EA353 /* XCRemoteSwiftPackageReference "swift-algorithms" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-algorithms.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.0;
+			};
+		};
+		87658A882CE2CFCD004EA353 /* XCRemoteSwiftPackageReference "VoiceRecorderKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/devdchaudhary/VoiceRecorderKit";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		87658A862CE2CFB9004EA353 /* Algorithms */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 87658A852CE2CFB9004EA353 /* XCRemoteSwiftPackageReference "swift-algorithms" */;
+			productName = Algorithms;
+		};
+		87658A892CE2CFCD004EA353 /* VoiceRecorderKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 87658A882CE2CFCD004EA353 /* XCRemoteSwiftPackageReference "VoiceRecorderKit" */;
+			productName = VoiceRecorderKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		543615372CCC86860063BB7F /* FinalProject_CSE438.xcdatamodeld */ = {
