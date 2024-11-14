@@ -3,6 +3,7 @@
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -36,25 +37,25 @@
                                 </items>
                             </navigationBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="meO-t5-dES">
-                                <rect key="frame" x="0.0" y="140.33333333333337" width="393" height="241"/>
+                                <rect key="frame" x="0.0" y="140" width="393" height="214"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="241" id="td2-F1-Fld"/>
+                                    <constraint firstAttribute="height" constant="214" id="td2-F1-Fld"/>
                                 </constraints>
                             </tableView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="hbD-ZX-qj5">
-                                <rect key="frame" x="0.0" y="417.66666666666674" width="393" height="352.33333333333326"/>
+                                <rect key="frame" x="0.0" y="490.33333333333326" width="393" height="279.66666666666674"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Model Thoughts" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f1r-8Q-bbA">
-                                <rect key="frame" x="16" y="389.33333333333331" width="125" height="20.333333333333314"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Q&amp;A" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f1r-8Q-bbA">
+                                <rect key="frame" x="16" y="461" width="125" height="21.333333333333314"/>
+                                <fontDescription key="fontDescription" name="EuphemiaUCAS" family="Euphemia UCAS" pointSize="16"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Transcript" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HZt-Xf-hGC">
-                                <rect key="frame" x="16" y="112" width="77" height="20.333333333333343"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <rect key="frame" x="16" y="112" width="77" height="20"/>
+                                <fontDescription key="fontDescription" name="EuphemiaUCAS" family="Euphemia UCAS" pointSize="16"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -80,28 +81,46 @@
                                     </button>
                                 </subviews>
                             </stackView>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="xde-l9-NxQ">
+                                <rect key="frame" x="1" y="395.33333333333331" width="393" height="57.666666666666686"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Model Thoughts" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MeL-Gd-LjR">
+                                <rect key="frame" x="16" y="362" width="121" height="21.333333333333314"/>
+                                <fontDescription key="fontDescription" name="EuphemiaUCAS" family="Euphemia UCAS" pointSize="16"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" name="Background"/>
                         <constraints>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="MeL-Gd-LjR" secondAttribute="trailing" symbolic="YES" id="0E6-Kl-Ol5"/>
+                            <constraint firstItem="MeL-Gd-LjR" firstAttribute="leading" secondItem="lk4-LF-5Qq" secondAttribute="leading" constant="-2" id="2en-fa-b2N"/>
+                            <constraint firstItem="f1r-8Q-bbA" firstAttribute="top" secondItem="xde-l9-NxQ" secondAttribute="bottom" constant="8" id="2n6-df-Khp"/>
                             <constraint firstItem="meO-t5-dES" firstAttribute="trailing" secondItem="iS3-ZL-WKu" secondAttribute="trailing" id="5Lb-2S-Oqw"/>
+                            <constraint firstItem="xde-l9-NxQ" firstAttribute="top" secondItem="MeL-Gd-LjR" secondAttribute="bottom" constant="12" id="5Vd-Cz-QXQ"/>
                             <constraint firstItem="HZt-Xf-hGC" firstAttribute="top" secondItem="iS3-ZL-WKu" secondAttribute="bottom" constant="9" id="6CO-Xh-uU8"/>
                             <constraint firstItem="meO-t5-dES" firstAttribute="top" secondItem="HZt-Xf-hGC" secondAttribute="bottom" constant="8" id="6Ch-Vw-lgy"/>
                             <constraint firstItem="iS3-ZL-WKu" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="8Tv-fd-6Mh"/>
                             <constraint firstItem="meO-t5-dES" firstAttribute="leading" secondItem="hbD-ZX-qj5" secondAttribute="leading" id="BgA-RN-6cq"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="f1r-8Q-bbA" secondAttribute="trailing" constant="252" id="Bk6-bb-SI6"/>
+                            <constraint firstItem="MeL-Gd-LjR" firstAttribute="top" secondItem="meO-t5-dES" secondAttribute="bottom" constant="8" symbolic="YES" id="LDV-TH-tgf"/>
                             <constraint firstItem="lk4-LF-5Qq" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="18" id="PPz-eG-aFr"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="lk4-LF-5Qq" secondAttribute="bottom" id="PTk-PO-7Oc"/>
                             <constraint firstItem="HZt-Xf-hGC" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="f1r-8Q-bbA" secondAttribute="leading" id="QhP-5A-YeF"/>
+                            <constraint firstItem="xde-l9-NxQ" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="1" id="V2E-Xt-BII"/>
                             <constraint firstItem="iS3-ZL-WKu" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="bdt-7J-S6x"/>
                             <constraint firstItem="meO-t5-dES" firstAttribute="trailing" secondItem="hbD-ZX-qj5" secondAttribute="trailing" id="csO-XR-kza"/>
                             <constraint firstItem="hbD-ZX-qj5" firstAttribute="top" secondItem="f1r-8Q-bbA" secondAttribute="bottom" constant="8" id="dvk-fZ-vjX"/>
                             <constraint firstItem="lk4-LF-5Qq" firstAttribute="top" secondItem="hbD-ZX-qj5" secondAttribute="bottom" constant="8" symbolic="YES" id="fSj-6y-g03"/>
                             <constraint firstItem="iS3-ZL-WKu" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="kBi-o6-apF"/>
+                            <constraint firstItem="xde-l9-NxQ" firstAttribute="centerX" secondItem="lk4-LF-5Qq" secondAttribute="centerX" id="nd7-H4-oIL"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="HZt-Xf-hGC" secondAttribute="trailing" constant="300" id="rx0-20-oCa"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="lk4-LF-5Qq" secondAttribute="trailing" constant="16" id="ryI-lV-5Gm"/>
-                            <constraint firstItem="f1r-8Q-bbA" firstAttribute="top" secondItem="meO-t5-dES" secondAttribute="bottom" constant="8" id="uUg-pS-ahv"/>
+                            <constraint firstItem="f1r-8Q-bbA" firstAttribute="top" secondItem="meO-t5-dES" secondAttribute="bottom" constant="107" id="uUg-pS-ahv"/>
                             <constraint firstItem="HZt-Xf-hGC" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="yb1-gm-b9p"/>
+                            <constraint firstItem="MeL-Gd-LjR" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="362" id="yzY-F7-GtK"/>
                             <constraint firstItem="meO-t5-dES" firstAttribute="leading" secondItem="iS3-ZL-WKu" secondAttribute="leading" id="zWY-Vu-4BM"/>
                         </constraints>
                     </view>
@@ -115,7 +134,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1515.2671755725189" y="-32.394366197183103"/>
+            <point key="canvasLocation" x="1513.7404580152672" y="-32.394366197183103"/>
         </scene>
         <!--History View Controller-->
         <scene sceneID="5f7-aK-F1Z">
@@ -195,6 +214,9 @@
         <image name="book" catalog="system" width="128" height="99"/>
         <image name="mic" catalog="system" width="110" height="128"/>
         <image name="plus" catalog="system" width="128" height="113"/>
+        <namedColor name="Background">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
