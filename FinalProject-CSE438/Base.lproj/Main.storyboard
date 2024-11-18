@@ -98,6 +98,9 @@
                                 </constraints>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="square.and.arrow.down" catalog="system"/>
+                                <connections>
+                                    <action selector="modelThoughtsImageSaved:" destination="BYZ-38-t0r" eventType="touchUpInside" id="zP0-4p-5fD"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pM7-5M-bzx">
                                 <rect key="frame" x="44" y="454" width="48.333333333333329" height="35"/>
@@ -106,11 +109,17 @@
                                 </constraints>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="square.and.arrow.down" catalog="system"/>
+                                <connections>
+                                    <action selector="questionAndAnswerImageSaved:" destination="BYZ-38-t0r" eventType="touchUpInside" id="QKV-Wa-5KW"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2no-TY-m05">
                                 <rect key="frame" x="82" y="105" width="49" height="34.333333333333343"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="square.and.arrow.down" catalog="system"/>
+                                <connections>
+                                    <action selector="transcriptImageSaved:" destination="BYZ-38-t0r" eventType="touchUpInside" id="3SF-eu-lKm"/>
+                                </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>

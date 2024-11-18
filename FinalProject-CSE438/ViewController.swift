@@ -173,6 +173,48 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         navigationController?.popViewController(animated: true)
     }
     
+    @IBAction func transcriptImageSaved(_ sender: Any) {
+        guard let image = transcriptTableView.asImage() else {
+            showSaveError("Could not generate image.")
+            return
+        }
+        UIImageWriteToSavedPhotosAlbum(image, self, #selector(imageSaveCompletion(_:didFinishSavingWithError:contextInfo:)), nil)
+    }
+    
+    @IBAction func modelThoughtsImageSaved(_ sender: Any) {
+        guard let image = modelThoughtsTableView.asImage() else {
+               showSaveError("Could not generate image.")
+               return
+           }
+           UIImageWriteToSavedPhotosAlbum(image, self, #selector(imageSaveCompletion(_:didFinishSavingWithError:contextInfo:)), nil)
+    }
+    
+    @IBAction func questionAndAnswerImageSaved(_ sender: Any) {
+        guard let image = questionAndAnswerTableView.asImage() else {
+               showSaveError("Could not generate image.")
+               return
+           }
+           UIImageWriteToSavedPhotosAlbum(image, self, #selector(imageSaveCompletion(_:didFinishSavingWithError:contextInfo:)), nil)
+    }
+    
+    func showSaveError(_ message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
+    }
+    
+    @objc func imageSaveCompletion(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
+        if let error = error {
+            let alert = UIAlertController(title: "Save error", message: error.localizedDescription, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default))
+            present(alert, animated: true)
+        } else {
+            let alert = UIAlertController(title: "Saved!", message: "Your image has been saved to your photos.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default))
+            present(alert, animated: true)
+        }
+    }
+    
     @IBAction func microphoneTapped(_ sender: Any) {
         isRecording = !isRecording
         let darkGreen = UIColor(red: 0.0, green: 0.5, blue: 0.0, alpha: 1.0)
@@ -202,4 +244,44 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         questionAndAnswerTableView.reloadData()
         modelThoughtsTableView.reloadData()
     }
+}
+
+extension UITableView {
+    func asImage() -> UIImage? {
+
+            guard self.numberOfSections > 0, self.numberOfRows(inSection: 0) > 0 else {
+                return nil
+            }
+
+            self.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
+
+            var height: CGFloat = 0.0
+            for section in 0..<self.numberOfSections {
+                var cellHeight: CGFloat = 0.0
+                for row in 0..<self.numberOfRows(inSection: section) {
+                    let indexPath = IndexPath(row: row, section: section)
+                    guard let cell = self.cellForRow(at: indexPath) else { continue }
+                    cellHeight = cell.frame.size.height
+                }
+                height += cellHeight * CGFloat(self.numberOfRows(inSection: section))
+            }
+
+            UIGraphicsBeginImageContextWithOptions(CGSize(width: self.contentSize.width, height: height), false, UIScreen.main.scale)
+
+            for section in 0..<self.numberOfSections {
+                for row in 0..<self.numberOfRows(inSection: section) {
+                    let indexPath = IndexPath(row: row, section: section)
+                    guard let cell = self.cellForRow(at: indexPath) else { continue }
+                    cell.contentView.drawHierarchy(in: cell.frame, afterScreenUpdates: true)
+
+                    if row < self.numberOfRows(inSection: section) - 1 {
+                        self.scrollToRow(at: IndexPath(row: row+1, section: section), at: .bottom, animated: false)
+                    }
+                }
+            }
+            let image = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+
+            return image
+        }
 }
