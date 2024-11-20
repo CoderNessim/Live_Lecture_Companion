@@ -246,6 +246,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
 }
 
+
+//solution for saving image of a table view found on stack overflow: https://stackoverflow.com/questions/32114807/how-to-render-a-whole-uitableview-as-an-uiimage-in-ios
 extension UITableView {
     func asImage() -> UIImage? {
 
