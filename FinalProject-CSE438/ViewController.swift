@@ -75,6 +75,31 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         textField.delegate = self
 
         loadMessages()
+        
+        
+        
+        // Example Usage
+        let exampleFilePath = "/Users/ijoseph/Documents/GitHub/FinalProject-CSE438/FinalProject-CSE438/obama.wav" // Replace with the actual file path
+
+        // Load the .wav file into a Data object
+        if let fileData = try? Data(contentsOf: URL(fileURLWithPath: exampleFilePath)) {
+            processWavData(bytestream: fileData) { response in
+                print("/process_wav_data/ Response: \(response)")
+            }
+        } else {
+            print("Failed to load file at path: \(exampleFilePath)")
+        }
+        
+        processWavFile(filePath: exampleFilePath) { response in
+            print("/process_wav_file/ Response: \(response)")
+        }
+
+        let exampleQuestion = "What is the meaning of life?"
+        questionAndAnswer(question: exampleQuestion) { response in
+            print("/question/ Response: \(response)")
+        }
+
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {

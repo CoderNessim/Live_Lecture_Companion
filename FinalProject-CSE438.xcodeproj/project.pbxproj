@@ -16,6 +16,7 @@
 		5436153B2CCC86880063BB7F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5436153A2CCC86880063BB7F /* Assets.xcassets */; };
 		5436153E2CCC86880063BB7F /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 5436153D2CCC86880063BB7F /* Base */; };
 		546129B92CD2901C00098578 /* ChatBubbleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546129B82CD2901C00098578 /* ChatBubbleCell.swift */; };
+		8757B1F92CF2796E00A301C1 /* api.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8757B1F82CF2796E00A301C1 /* api.swift */; };
 		87658A842CE2BD0D004EA353 /* microphone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87658A832CE2BD0D004EA353 /* microphone.swift */; };
 		87658A872CE2CFB9004EA353 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 87658A862CE2CFB9004EA353 /* Algorithms */; };
 		87658A8A2CE2CFCD004EA353 /* VoiceRecorderKit in Frameworks */ = {isa = PBXBuildFile; productRef = 87658A892CE2CFCD004EA353 /* VoiceRecorderKit */; };
@@ -35,6 +36,7 @@
 		5436153D2CCC86880063BB7F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5436153F2CCC86880063BB7F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		546129B82CD2901C00098578 /* ChatBubbleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatBubbleCell.swift; sourceTree = "<group>"; };
+		8757B1F82CF2796E00A301C1 /* api.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = api.swift; sourceTree = "<group>"; };
 		87658A832CE2BD0D004EA353 /* microphone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = microphone.swift; sourceTree = "<group>"; };
 		AF50AB8F2CDC499C00AB4B30 /* ChatManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatManager.swift; sourceTree = "<group>"; };
 		AF6A2BDF2CDAA7200088F247 /* APICaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APICaller.swift; sourceTree = "<group>"; };
@@ -85,6 +87,7 @@
 				AF6A2BDF2CDAA7200088F247 /* APICaller.swift */,
 				AF50AB8F2CDC499C00AB4B30 /* ChatManager.swift */,
 				87658A832CE2BD0D004EA353 /* microphone.swift */,
+				8757B1F82CF2796E00A301C1 /* api.swift */,
 			);
 			path = "FinalProject-CSE438";
 			sourceTree = "<group>";
@@ -168,6 +171,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8757B1F92CF2796E00A301C1 /* api.swift in Sources */,
 				543615392CCC86860063BB7F /* FinalProject_CSE438.xcdatamodeld in Sources */,
 				546129B92CD2901C00098578 /* ChatBubbleCell.swift in Sources */,
 				543615332CCC86860063BB7F /* ViewController.swift in Sources */,
