@@ -83,19 +83,19 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
         // Load the .wav file into a Data object
         if let fileData = try? Data(contentsOf: URL(fileURLWithPath: exampleFilePath)) {
-            processWavData(bytestream: fileData) { response in
+            processWavData(bytestream: fileData, condensedTranscript: "") { response in
                 print("/process_wav_data/ Response: \(response)")
             }
         } else {
             print("Failed to load file at path: \(exampleFilePath)")
         }
         
-        processWavFile(filePath: exampleFilePath) { response in
+        processWavFile(filePath: exampleFilePath, condensedTranscript: "") { response in
             print("/process_wav_file/ Response: \(response)")
         }
 
         let exampleQuestion = "What is the meaning of life?"
-        questionAndAnswer(question: exampleQuestion) { response in
+        questionAndAnswer(question: exampleQuestion, condensedTranscript: "") { response in
             print("/question/ Response: \(response)")
         }
 

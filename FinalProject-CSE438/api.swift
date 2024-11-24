@@ -3,7 +3,7 @@ import Foundation
 let apiBaseURL = "https://fastapi-service-940454193602.us-central1.run.app"
 
 // Function to test /process_wav_data/
-func processWavData(bytestream: Data, completion: @escaping (String) -> Void) {
+func processWavData(bytestream: Data, condensedTranscript: String, completion: @escaping (String) -> Void) {
     guard let url = URL(string: apiBaseURL + "/process_wav_data/") else {
         completion("Invalid URL")
         return
@@ -12,6 +12,7 @@ func processWavData(bytestream: Data, completion: @escaping (String) -> Void) {
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
     request.setValue("application/octet-stream", forHTTPHeaderField: "Content-Type")
+    request.setValue(condensedTranscript, forHTTPHeaderField: "Condensed-Transcript")
     request.httpBody = bytestream
 
     let task = URLSession.shared.dataTask(with: request) { data, response, error in
@@ -29,7 +30,7 @@ func processWavData(bytestream: Data, completion: @escaping (String) -> Void) {
 }
 
 // Function to test /process_wav_file/
-func processWavFile(filePath: String, completion: @escaping (String) -> Void) {
+func processWavFile(filePath: String, condensedTranscript: String, completion: @escaping (String) -> Void) {
     guard let url = URL(string: apiBaseURL + "/process_wav_file/"),
           let fileURL = URL(string: "file://\(filePath)") else {
         completion("Invalid URL")
@@ -38,6 +39,7 @@ func processWavFile(filePath: String, completion: @escaping (String) -> Void) {
 
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
+    request.setValue(condensedTranscript, forHTTPHeaderField: "Condensed-Transcript")
 
     let boundary = UUID().uuidString
     request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
@@ -71,7 +73,7 @@ func processWavFile(filePath: String, completion: @escaping (String) -> Void) {
 }
 
 // Function to test /question/
-func questionAndAnswer(question: String, completion: @escaping (String) -> Void) {
+func questionAndAnswer(question: String, condensedTranscript: String, completion: @escaping (String) -> Void) {
     guard let url = URL(string: apiBaseURL + "/question/") else {
         completion("Invalid URL")
         return
@@ -80,6 +82,7 @@ func questionAndAnswer(question: String, completion: @escaping (String) -> Void)
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
     request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+    request.setValue(condensedTranscript, forHTTPHeaderField: "Condensed-Transcript")
     let bodyString = "question=\(question.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")"
     request.httpBody = bodyString.data(using: .utf8)
 
@@ -96,4 +99,5 @@ func questionAndAnswer(question: String, completion: @escaping (String) -> Void)
     }
     task.resume()
 }
+
 
