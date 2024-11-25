@@ -13,6 +13,7 @@ func processWavData(bytestream: Data, condensedTranscript: String, completion: @
     request.httpMethod = "POST"
     request.setValue("application/octet-stream", forHTTPHeaderField: "Content-Type")
     request.setValue(condensedTranscript, forHTTPHeaderField: "Condensed-Transcript")
+//    request.setValue("\(bytestream.count)", forHTTPHeaderField: "Content-Length")
     request.httpBody = bytestream
 
     let task = URLSession.shared.dataTask(with: request) { data, response, error in
@@ -20,12 +21,18 @@ func processWavData(bytestream: Data, condensedTranscript: String, completion: @
             completion("Error: \(error.localizedDescription)")
             return
         }
+        if let httpResponse = response as? HTTPURLResponse {
+            print("Status Code: \(httpResponse.statusCode)")
+            print("Headers: \(httpResponse.allHeaderFields)")
+        }
         guard let data = data, let responseString = String(data: data, encoding: .utf8) else {
             completion("Invalid response data")
             return
         }
         completion(responseString)
     }
+    task.resume()
+
     task.resume()
 }
 

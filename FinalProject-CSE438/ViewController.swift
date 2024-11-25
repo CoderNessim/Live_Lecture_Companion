@@ -24,7 +24,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var currentChat: Chat?
     var isRecording: Bool = false
     
-    let audioRecorder = AudioRecorder()
+    var audioRecorder: AudioRecorder!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,31 +75,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         textField.delegate = self
 
         loadMessages()
-        
-        
-        
-        // Example Usage
-        let exampleFilePath = "/Users/ijoseph/Documents/GitHub/FinalProject-CSE438/FinalProject-CSE438/obama.wav" // Replace with the actual file path
 
-        // Load the .wav file into a Data object
-        if let fileData = try? Data(contentsOf: URL(fileURLWithPath: exampleFilePath)) {
-            processWavData(bytestream: fileData, condensedTranscript: "") { response in
-                print("/process_wav_data/ Response: \(response)")
-            }
-        } else {
-            print("Failed to load file at path: \(exampleFilePath)")
-        }
-        
-        processWavFile(filePath: exampleFilePath, condensedTranscript: "") { response in
-            print("/process_wav_file/ Response: \(response)")
-        }
+        let initialTranscript = transcriptMessages.first?.0 ?? ""
+        audioRecorder = AudioRecorder(condensedTranscript: initialTranscript)
 
-        let exampleQuestion = "What is the meaning of life?"
-        questionAndAnswer(question: exampleQuestion, condensedTranscript: "") { response in
-            print("/question/ Response: \(response)")
-        }
-
-        
+        // Clear any previous audio file at startup
+        audioRecorder.clearAudioFileIfExists()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -197,54 +178,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         navigationController?.popViewController(animated: true)
     }
-    
-    @IBAction func transcriptImageSaved(_ sender: Any) {
-        guard let image = transcriptTableView.asImage() else {
-            showSaveError("Could not generate image.")
-            return
-        }
-        UIImageWriteToSavedPhotosAlbum(image, self, #selector(imageSaveCompletion(_:didFinishSavingWithError:contextInfo:)), nil)
-    }
-    
-    @IBAction func modelThoughtsImageSaved(_ sender: Any) {
-        guard let image = modelThoughtsTableView.asImage() else {
-               showSaveError("Could not generate image.")
-               return
-           }
-           UIImageWriteToSavedPhotosAlbum(image, self, #selector(imageSaveCompletion(_:didFinishSavingWithError:contextInfo:)), nil)
-    }
-    
-    @IBAction func questionAndAnswerImageSaved(_ sender: Any) {
-        guard let image = questionAndAnswerTableView.asImage() else {
-               showSaveError("Could not generate image.")
-               return
-           }
-           UIImageWriteToSavedPhotosAlbum(image, self, #selector(imageSaveCompletion(_:didFinishSavingWithError:contextInfo:)), nil)
-    }
-    
-    func showSaveError(_ message: String) {
-        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
-    }
-    
-    @objc func imageSaveCompletion(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
-        if let error = error {
-            let alert = UIAlertController(title: "Save error", message: error.localizedDescription, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default))
-            present(alert, animated: true)
-        } else {
-            let alert = UIAlertController(title: "Saved!", message: "Your image has been saved to your photos.", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default))
-            present(alert, animated: true)
-        }
-    }
-    
+
     @IBAction func microphoneTapped(_ sender: Any) {
         isRecording = !isRecording
         let darkGreen = UIColor(red: 0.0, green: 0.5, blue: 0.0, alpha: 1.0)
 
         if isRecording {
+            audioRecorder.clearAudioFileIfExists() // Clear file before starting recording
             audioRecorder.startRecordingAudio()
             microphone.tintColor = darkGreen
         } else {
@@ -252,14 +192,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             microphone.tintColor = .systemBlue
         }
     }
-    
-    //MAKE CHANGES TO isTRANSCRIPT PROPERTY OF ChATMANAGer??
+
     private func loadMessages() {
         guard let chat = currentChat else { return }
         
         let transcriptMessages = ChatManager.shared.fetchMessages(for: chat, isTranscript: true)
         let questionAndAnswerMessages = ChatManager.shared.fetchMessages(for: chat, isTranscript: false)
-        let modelThoughtsMessages = ChatManager.shared.fetchMessages(for: chat, isTranscript: true) //need to change this since it is not transcript nor question and answer
+        let modelThoughtsMessages = ChatManager.shared.fetchMessages(for: chat, isTranscript: true) // Update logic here if needed
 
         self.transcriptMessages = transcriptMessages.map { ($0.content!, $0.isFromUser) }
         self.questionAndAnswerMessages = questionAndAnswerMessages.map { ($0.content!, $0.isFromUser) }
