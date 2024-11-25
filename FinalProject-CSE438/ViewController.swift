@@ -1,10 +1,3 @@
-//
-//  ViewController.swift
-//  FinalProject-CSE438
-//
-//  Created by Nessim Yohros on 10/25/24.
-//
-
 import UIKit
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
@@ -13,36 +6,36 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     @IBOutlet weak var transcriptTableView: UITableView!
     @IBOutlet weak var questionAndAnswerTableView: UITableView!
     @IBOutlet weak var modelThoughtsTableView: UITableView!
-    
     @IBOutlet weak var microphone: UIButton!
     @IBOutlet weak var textField: UITextField!
-    
+
     var transcriptMessages: [(String, Bool)] = [] // (message, isFromUser)
     private var questionAndAnswerMessages: [(String, Bool)] = [] // (message, isFromUser)
     private var modelThoughtsMessages: [(String, Bool)] = [] // (message, isFromUser)
-    
+
     var currentChat: Chat?
     var isRecording: Bool = false
-    
     var audioRecorder: AudioRecorder!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.hidesBackButton = true
 
+        // Setup navigation bar title
         let titleLabel = UILabel()
         titleLabel.text = "Live Lecture Companion"
         titleLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         titleLabel.textColor = .white
         titleLabel.sizeToFit()
-        
         let leftTitleItem = UIBarButtonItem(customView: titleLabel)
         navbar.leftBarButtonItem = leftTitleItem
-        
+
+        // Register table views
         transcriptTableView.register(ChatBubbleCell.self, forCellReuseIdentifier: "ChatBubbleCell")
         questionAndAnswerTableView.register(ChatBubbleCell.self, forCellReuseIdentifier: "ChatBubbleCell")
         modelThoughtsTableView.register(ChatBubbleCell.self, forCellReuseIdentifier: "ChatBubbleCell")
 
+        // Set table view delegates and data sources
         transcriptTableView.dataSource = self
         transcriptTableView.delegate = self
         questionAndAnswerTableView.dataSource = self
@@ -50,39 +43,29 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         modelThoughtsTableView.dataSource = self
         modelThoughtsTableView.delegate = self
 
-        transcriptTableView.separatorStyle = .none
-        questionAndAnswerTableView.separatorStyle = .none
-        modelThoughtsTableView.separatorStyle = .none
-        transcriptTableView.allowsSelection = false
-        questionAndAnswerTableView.allowsSelection = false
-        modelThoughtsTableView.allowsSelection = false
-
-        transcriptTableView.backgroundColor = .systemBackground
-        questionAndAnswerTableView.backgroundColor = .systemBackground
-        modelThoughtsTableView.backgroundColor = .systemBackground
-
-        transcriptTableView.rowHeight = UITableView.automaticDimension
-        transcriptTableView.estimatedRowHeight = 60
-        questionAndAnswerTableView.rowHeight = UITableView.automaticDimension
-        questionAndAnswerTableView.estimatedRowHeight = 60
-        modelThoughtsTableView.rowHeight = UITableView.automaticDimension
-        modelThoughtsTableView.estimatedRowHeight = 60
-
-        transcriptTableView.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
-        questionAndAnswerTableView.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
-        modelThoughtsTableView.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
+        // Table view configurations
+        configureTableViews()
 
         textField.delegate = self
 
+        // Load messages
         loadMessages()
 
+        // Initialize AudioRecorder
         let initialTranscript = transcriptMessages.first?.0 ?? ""
         audioRecorder = AudioRecorder(condensedTranscript: initialTranscript)
-
-        // Clear any previous audio file at startup
         audioRecorder.clearAudioFileIfExists()
+
+        // Register keyboard notifications
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
-    
+
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
@@ -95,10 +78,21 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
         scrollToBottom(tableView: transcriptTableView)
         scrollToBottom(tableView: questionAndAnswerTableView)
         scrollToBottom(tableView: modelThoughtsTableView)
+    }
+
+    private func configureTableViews() {
+        // Disable selection and separators
+        [transcriptTableView, questionAndAnswerTableView, modelThoughtsTableView].forEach { tableView in
+            tableView?.separatorStyle = .none
+            tableView?.allowsSelection = false
+            tableView?.backgroundColor = .systemBackground
+            tableView?.rowHeight = UITableView.automaticDimension
+            tableView?.estimatedRowHeight = 60
+            tableView?.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
+        }
     }
 
     private func scrollToBottom(tableView: UITableView) {
@@ -109,74 +103,71 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
 
+    // MARK: - Keyboard Handling
+    @objc func keyboardWillShow(_ notification: Notification) {
+        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
+        let keyboardHeight = keyboardFrame.height
+        let offset: CGFloat = 0 // Add 10 points of space between the keyboard and the text input bar
+
+        view.frame.origin.y = -keyboardHeight + offset
+    }
+
+    @objc func keyboardWillHide(_ notification: Notification) {
+        view.frame.origin.y = 0
+    }
+
+    // MARK: - UITableViewDataSource and UITableViewDelegate
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if tableView == transcriptTableView {
-            return transcriptMessages.count
-        } else if tableView == questionAndAnswerTableView {
-            return questionAndAnswerMessages.count
-        } else if tableView == modelThoughtsTableView {
-            return modelThoughtsMessages.count
-        }
+        if tableView == transcriptTableView { return transcriptMessages.count }
+        if tableView == questionAndAnswerTableView { return questionAndAnswerMessages.count }
+        if tableView == modelThoughtsTableView { return modelThoughtsMessages.count }
         return 0
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ChatBubbleCell", for: indexPath) as? ChatBubbleCell else {
-            return UITableViewCell()
-        }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ChatBubbleCell", for: indexPath) as? ChatBubbleCell else { return UITableViewCell() }
         
-        if tableView == transcriptTableView {
-            let message = transcriptMessages[indexPath.row]
-            cell.configure(with: message.0, isFromUser: message.1)
-        } else if tableView == questionAndAnswerTableView {
-            let message = questionAndAnswerMessages[indexPath.row]
-            cell.configure(with: message.0, isFromUser: message.1)
-        } else if tableView == modelThoughtsTableView {
-            let message = modelThoughtsMessages[indexPath.row]
-            cell.configure(with: message.0, isFromUser: message.1)
-        }
+        let message = {
+            if tableView == transcriptTableView { return transcriptMessages[indexPath.row] }
+            if tableView == questionAndAnswerTableView { return questionAndAnswerMessages[indexPath.row] }
+            return modelThoughtsMessages[indexPath.row]
+        }()
         
+        cell.configure(with: message.0, isFromUser: message.1)
         return cell
     }
 
+    // MARK: - UITextFieldDelegate
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if let text = textField.text, !text.isEmpty, let chat = currentChat {
+        textField.resignFirstResponder()
+
+        if let text = textField.text, !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty, let chat = currentChat {
             ChatManager.shared.saveMessage(content: text, isFromUser: true, isTranscript: false, chat: chat)
             questionAndAnswerMessages.append((text, true))
             textField.text = ""
-            
+
             questionAndAnswerTableView.reloadData()
             scrollToBottom(tableView: questionAndAnswerTableView)
-            
+
             APICaller.shared.getResponse(input: text) { [weak self] result in
                 guard let self = self else { return }
-                
                 DispatchQueue.main.async {
                     switch result {
                     case .success(let output):
                         ChatManager.shared.saveMessage(content: output, isFromUser: false, isTranscript: false, chat: chat)
                         self.questionAndAnswerMessages.append((output, false))
                     case .failure(let error):
-                        print("Error:", error)
                         let errorMessage = "Sorry, I couldn't process that request."
                         ChatManager.shared.saveMessage(content: errorMessage, isFromUser: false, isTranscript: false, chat: chat)
                         self.questionAndAnswerMessages.append((errorMessage, false))
+                        print("Error: \(error)")
                     }
-                    
                     self.questionAndAnswerTableView.reloadData()
                     self.scrollToBottom(tableView: self.questionAndAnswerTableView)
                 }
             }
-            return true
         }
-        return false
-    }
-    
-    @IBAction func historyButtonTapped(_ sender: Any) {
-        if isRecording {
-            audioRecorder.stopRecording()
-        }
-        navigationController?.popViewController(animated: true)
+        return true
     }
 
     @IBAction func microphoneTapped(_ sender: Any) {
@@ -192,18 +183,58 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             microphone.tintColor = .systemBlue
         }
     }
+    
+    ///SAVING IMAGES
+    
+    @IBAction func transcriptImageSaved(_ sender: Any) {
+            guard let image = transcriptTableView.asImage() else {
+                showSaveError("Could not generate image.")
+                return
+            }
+            UIImageWriteToSavedPhotosAlbum(image, self, #selector(imageSaveCompletion(_:didFinishSavingWithError:contextInfo:)), nil)
+        }
+        
+        @IBAction func modelThoughtsImageSaved(_ sender: Any) {
+            guard let image = modelThoughtsTableView.asImage() else {
+                   showSaveError("Could not generate image.")
+                   return
+               }
+               UIImageWriteToSavedPhotosAlbum(image, self, #selector(imageSaveCompletion(_:didFinishSavingWithError:contextInfo:)), nil)
+        }
+        
+        @IBAction func questionAndAnswerImageSaved(_ sender: Any) {
+            guard let image = questionAndAnswerTableView.asImage() else {
+                   showSaveError("Could not generate image.")
+                   return
+               }
+               UIImageWriteToSavedPhotosAlbum(image, self, #selector(imageSaveCompletion(_:didFinishSavingWithError:contextInfo:)), nil)
+        }
+        
+        func showSaveError(_ message: String) {
+            let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default))
+            present(alert, animated: true)
+        }
+        
+        @objc func imageSaveCompletion(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
+            if let error = error {
+                let alert = UIAlertController(title: "Save error", message: error.localizedDescription, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default))
+                present(alert, animated: true)
+            } else {
+                let alert = UIAlertController(title: "Saved!", message: "Your image has been saved to your photos.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default))
+                present(alert, animated: true)
+            }
+        }
+        
 
     private func loadMessages() {
         guard let chat = currentChat else { return }
-        
-        let transcriptMessages = ChatManager.shared.fetchMessages(for: chat, isTranscript: true)
-        let questionAndAnswerMessages = ChatManager.shared.fetchMessages(for: chat, isTranscript: false)
-        let modelThoughtsMessages = ChatManager.shared.fetchMessages(for: chat, isTranscript: true) // Update logic here if needed
+        transcriptMessages = ChatManager.shared.fetchMessages(for: chat, isTranscript: true).map { ($0.content!, $0.isFromUser) }
+        questionAndAnswerMessages = ChatManager.shared.fetchMessages(for: chat, isTranscript: false).map { ($0.content!, $0.isFromUser) }
+        modelThoughtsMessages = ChatManager.shared.fetchMessages(for: chat, isTranscript: true).map { ($0.content!, $0.isFromUser) }
 
-        self.transcriptMessages = transcriptMessages.map { ($0.content!, $0.isFromUser) }
-        self.questionAndAnswerMessages = questionAndAnswerMessages.map { ($0.content!, $0.isFromUser) }
-        self.modelThoughtsMessages = modelThoughtsMessages.map { ($0.content!, $0.isFromUser) }
-        
         transcriptTableView.reloadData()
         questionAndAnswerTableView.reloadData()
         modelThoughtsTableView.reloadData()

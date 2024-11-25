@@ -69,6 +69,7 @@ class AudioRecorder: NSObject, AVAudioRecorderDelegate {
         let audioFilePath = getDocumentsDirectory().appendingPathComponent("recording.wav")
 
         processWavFile(filePath: audioFilePath.path, condensedTranscript: condensedTranscript) { response in
+            print("hi")
             print("Processing response: \(response)")
 
             DispatchQueue.main.async {
