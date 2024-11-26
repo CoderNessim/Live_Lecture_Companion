@@ -5,8 +5,8 @@ class AudioRecorder: NSObject, AVAudioRecorderDelegate {
     var recordingTimer: Timer?
     var condensedTranscript: String
     var isStopping: Bool = false
-    var isFirstRecording: Bool = true // Track the first recording
-    
+    var currentAudioFilename: URL?
+
     init(condensedTranscript: String) {
         self.condensedTranscript = condensedTranscript
         super.init()
@@ -28,7 +28,7 @@ class AudioRecorder: NSObject, AVAudioRecorderDelegate {
     func setupRecordingSession() {
         let audioSession = AVAudioSession.sharedInstance()
         do {
-            try audioSession.setCategory(.playAndRecord, mode: .default, options: .defaultToSpeaker)
+            try audioSession.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker, .allowBluetooth])
             try audioSession.setActive(true)
         } catch {
             print("Failed to set up audio session: \(error)")
@@ -36,7 +36,8 @@ class AudioRecorder: NSObject, AVAudioRecorderDelegate {
     }
 
     func startRecordingAudio() {
-        let audioFilename = getDocumentsDirectory().appendingPathComponent("recording.wav")
+        // Generate a unique filename for each recording
+        currentAudioFilename = getDocumentsDirectory().appendingPathComponent("recording_\(Date().timeIntervalSince1970).wav")
 
         let settings: [String: Any] = [
             AVFormatIDKey: kAudioFormatLinearPCM,
@@ -48,7 +49,7 @@ class AudioRecorder: NSObject, AVAudioRecorderDelegate {
         ]
 
         do {
-            audioRecorder = try AVAudioRecorder(url: audioFilename, settings: settings)
+            audioRecorder = try AVAudioRecorder(url: currentAudioFilename!, settings: settings)
             audioRecorder?.delegate = self
             audioRecorder?.record()
             print("Recording started.")
@@ -66,35 +67,48 @@ class AudioRecorder: NSObject, AVAudioRecorderDelegate {
     func restartRecording() {
         print("Restarting recording...")
         audioRecorder?.stop()
-        
-            
-        let audioFilePath = self.getDocumentsDirectory().appendingPathComponent("recording.wav")
+        // The rest is handled in the delegate method
+    }
 
-        processWavFile(filePath: audioFilePath.path, condensedTranscript: self.condensedTranscript) { response in
+    func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
+        guard flag else {
+            print("Recording failed.")
+            if !isStopping {
+                startRecordingAudio()
+            }
+            return
+        }
+
+        // Start new recording immediately to minimize gaps
+        if !isStopping {
+            startRecordingAudio()
+        }
+
+        // Process the audio file in the background
+        DispatchQueue.global(qos: .background).async {
+            let audioFilePath = recorder.url
+            processWavFile(filePath: audioFilePath.path, condensedTranscript: self.condensedTranscript) { response in
                 print("Processing response: \(response)")
-
+                // Handle UI updates if necessary on the main thread
                 DispatchQueue.main.async {
-                    if !self.isStopping {
-                        self.clearAudioFileIfExists()
-                        self.startRecordingAudio()
+                    // Update UI here
                 }
-            }
-        }
-    }
-    
-    //made a new function to clear audio file
-    func clearAudioFileIfExists() {
-        let audioFilePath = getDocumentsDirectory().appendingPathComponent("recording.wav")
-        if FileManager.default.fileExists(atPath: audioFilePath.path) {
-            do {
-                try FileManager.default.removeItem(at: audioFilePath)
-                print("Audio file cleared at path: \(audioFilePath.path)")
-            } catch {
-                print("Failed to clear audio file: \(error)")
+                // Optionally delete the processed file to save space
+                self.deleteAudioFile(at: audioFilePath)
             }
         }
     }
 
+    func deleteAudioFile(at url: URL) {
+        if FileManager.default.fileExists(atPath: url.path) {
+            do {
+                try FileManager.default.removeItem(at: url)
+                print("Deleted audio file at path: \(url.path)")
+            } catch {
+                print("Failed to delete audio file: \(error)")
+            }
+        }
+    }
 
     func stopRecording() {
         isStopping = true
@@ -104,23 +118,9 @@ class AudioRecorder: NSObject, AVAudioRecorderDelegate {
 
         audioRecorder?.stop()
         print("Recording stopped.")
-
-        // Get the path of the recording file
-//        let audioFilePath = getDocumentsDirectory().appendingPathComponent("recording.wav")
-
-        // Check if the file exists
-//        if FileManager.default.fileExists(atPath: audioFilePath.path) {
-//            print("Recording saved at: \(audioFilePath.path)")
-//            return audioFilePath.path
-//        } else {
-//            print("Recording file not found.")
-//            return nil
-//        }
     }
 
     func getDocumentsDirectory() -> URL {
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        return paths[0]
+        return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
     }
 }
-

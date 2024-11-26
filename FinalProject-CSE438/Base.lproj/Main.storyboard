@@ -65,9 +65,6 @@
                                     <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="cfj-gP-jdd">
                                         <rect key="frame" x="0.0" y="0.0" width="313.33333333333331" height="40"/>
                                         <color key="backgroundColor" systemColor="systemGray6Color"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="313.32999999999998" id="p00-vp-PSr"/>
-                                        </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
@@ -144,6 +141,7 @@
                             <constraint firstItem="lk4-LF-5Qq" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="18" id="PPz-eG-aFr"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="lk4-LF-5Qq" secondAttribute="bottom" id="PTk-PO-7Oc"/>
                             <constraint firstItem="HZt-Xf-hGC" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="f1r-8Q-bbA" secondAttribute="leading" id="QhP-5A-YeF"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="cfj-gP-jdd" secondAttribute="bottom" id="RUZ-fd-xjI"/>
                             <constraint firstItem="Zpg-sy-8YK" firstAttribute="top" secondItem="meO-t5-dES" secondAttribute="bottom" constant="1" id="SGj-d5-bJc"/>
                             <constraint firstItem="Zpg-sy-8YK" firstAttribute="leading" secondItem="MeL-Gd-LjR" secondAttribute="trailing" constant="-6" id="SoJ-yg-pOU"/>
                             <constraint firstItem="xde-l9-NxQ" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="1" id="V2E-Xt-BII"/>

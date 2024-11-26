@@ -57,7 +57,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         // Initialize AudioRecorder
         let initialTranscript = transcriptMessages.first?.0 ?? ""
         audioRecorder = AudioRecorder(condensedTranscript: initialTranscript)
-        audioRecorder.clearAudioFileIfExists()
+//        audioRecorder.clearAudioFileIfExists()
 
         // Register keyboard notifications
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -207,7 +207,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let darkGreen = UIColor(red: 0.0, green: 0.5, blue: 0.0, alpha: 1.0)
 
         if isRecording {
-            audioRecorder.clearAudioFileIfExists() // Clear file before starting recording
+//            audioRecorder.clearAudioFileIfExists() // Clear file before starting recording
             audioRecorder.startRecordingAudio()
             microphone.tintColor = darkGreen
         } else {
