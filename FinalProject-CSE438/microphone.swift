@@ -65,16 +65,19 @@ class AudioRecorder: NSObject, AVAudioRecorderDelegate {
     func restartRecording() {
         print("Restarting recording...")
         audioRecorder?.stop()
+        
+        // Clear file and wait briefly before processing
+        DispatchQueue.global().asyncAfter(deadline: .now() + 0.2) {
+            
+            let audioFilePath = self.getDocumentsDirectory().appendingPathComponent("recording.wav")
 
-        let audioFilePath = getDocumentsDirectory().appendingPathComponent("recording.wav")
+            processWavFile(filePath: audioFilePath.path, condensedTranscript: self.condensedTranscript) { response in
+                print("Processing response: \(response)")
 
-        processWavFile(filePath: audioFilePath.path, condensedTranscript: condensedTranscript) { response in
-            print("hi")
-            print("Processing response: \(response)")
-
-            DispatchQueue.main.async {
-                if !self.isStopping {
-                    self.startRecordingAudio()
+                DispatchQueue.main.async {
+                    if !self.isStopping {
+                        self.startRecordingAudio()
+                    }
                 }
             }
         }
@@ -94,7 +97,7 @@ class AudioRecorder: NSObject, AVAudioRecorderDelegate {
     }
 
 
-    func stopRecording() -> String? {
+    func stopRecording() {
         isStopping = true
 
         recordingTimer?.invalidate()
@@ -107,19 +110,18 @@ class AudioRecorder: NSObject, AVAudioRecorderDelegate {
         let audioFilePath = getDocumentsDirectory().appendingPathComponent("recording.wav")
 
         // Check if the file exists
-        if FileManager.default.fileExists(atPath: audioFilePath.path) {
-            print("Recording saved at: \(audioFilePath.path)")
-            return audioFilePath.path
-        } else {
-            print("Recording file not found.")
-            return nil
-        }
+//        if FileManager.default.fileExists(atPath: audioFilePath.path) {
+//            print("Recording saved at: \(audioFilePath.path)")
+//            return audioFilePath.path
+//        } else {
+//            print("Recording file not found.")
+//            return nil
+//        }
     }
 
     func getDocumentsDirectory() -> URL {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         return paths[0]
     }
-    
 }
 

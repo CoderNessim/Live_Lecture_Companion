@@ -20,6 +20,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.hidesBackButton = true
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tapGesture)
 
         // Setup navigation bar title
         let titleLabel = UILabel()
@@ -59,11 +62,32 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         // Register keyboard notifications
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+//        
+//        if let filePath = Bundle.main.path(forResource: "recording 1", ofType: "wav") {
+//            print("File path: \(filePath)")
+//            
+//            // Call the function with the filePath as a string
+//            processWavFile(filePath: filePath, condensedTranscript: "", completion: { response in
+//                print("Processing response: \(response)")
+//            })
+//        } else {
+//            print("File not found in the bundle!")
+//        }
+
     }
 
     deinit {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        dismissKeyboard()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -170,6 +194,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return true
     }
 
+    @IBAction func historyButtonTapped(_ sender: Any) {
+       if isRecording {
+           audioRecorder.stopRecording()
+       }
+       navigationController?.popViewController(animated: true)
+    }
+    
     @IBAction func microphoneTapped(_ sender: Any) {
         isRecording = !isRecording
         let darkGreen = UIColor(red: 0.0, green: 0.5, blue: 0.0, alpha: 1.0)
