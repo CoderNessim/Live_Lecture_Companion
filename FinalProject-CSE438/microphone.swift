@@ -5,6 +5,7 @@ class AudioRecorder: NSObject, AVAudioRecorderDelegate {
     var recordingTimer: Timer?
     var condensedTranscript: String
     var isStopping: Bool = false
+    var isFirstRecording: Bool = true // Track the first recording
     
     init(condensedTranscript: String) {
         self.condensedTranscript = condensedTranscript
@@ -66,8 +67,7 @@ class AudioRecorder: NSObject, AVAudioRecorderDelegate {
         print("Restarting recording...")
         audioRecorder?.stop()
         
-        // Clear file and wait briefly before processing
-        DispatchQueue.global().asyncAfter(deadline: .now() + 0.2) {
+        DispatchQueue.global().asyncAfter(deadline: .now() + 0) {
             
             let audioFilePath = self.getDocumentsDirectory().appendingPathComponent("recording.wav")
 
@@ -76,6 +76,7 @@ class AudioRecorder: NSObject, AVAudioRecorderDelegate {
 
                 DispatchQueue.main.async {
                     if !self.isStopping {
+                        self.clearAudioFileIfExists()
                         self.startRecordingAudio()
                     }
                 }
@@ -107,7 +108,7 @@ class AudioRecorder: NSObject, AVAudioRecorderDelegate {
         print("Recording stopped.")
 
         // Get the path of the recording file
-        let audioFilePath = getDocumentsDirectory().appendingPathComponent("recording.wav")
+//        let audioFilePath = getDocumentsDirectory().appendingPathComponent("recording.wav")
 
         // Check if the file exists
 //        if FileManager.default.fileExists(atPath: audioFilePath.path) {
