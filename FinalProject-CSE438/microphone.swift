@@ -67,18 +67,16 @@ class AudioRecorder: NSObject, AVAudioRecorderDelegate {
         print("Restarting recording...")
         audioRecorder?.stop()
         
-        DispatchQueue.global().asyncAfter(deadline: .now() + 0) {
             
-            let audioFilePath = self.getDocumentsDirectory().appendingPathComponent("recording.wav")
+        let audioFilePath = self.getDocumentsDirectory().appendingPathComponent("recording.wav")
 
-            processWavFile(filePath: audioFilePath.path, condensedTranscript: self.condensedTranscript) { response in
+        processWavFile(filePath: audioFilePath.path, condensedTranscript: self.condensedTranscript) { response in
                 print("Processing response: \(response)")
 
                 DispatchQueue.main.async {
                     if !self.isStopping {
                         self.clearAudioFileIfExists()
                         self.startRecordingAudio()
-                    }
                 }
             }
         }
