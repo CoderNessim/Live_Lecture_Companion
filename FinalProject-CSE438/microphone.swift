@@ -1,11 +1,17 @@
 import AVFoundation
 
+protocol AudioRecorderDelegate: AnyObject {
+    func audioRecorder(_ recorder: AudioRecorder, didUpdateTranscript transcript: String)
+    func audioRecorder(_ recorder: AudioRecorder, didReceiveInsight insight: String)
+}
+
 class AudioRecorder: NSObject, AVAudioRecorderDelegate {
     var audioRecorder: AVAudioRecorder?
     var recordingTimer: Timer?
     var condensedTranscript: String
     var isStopping: Bool = false
     var currentAudioFilename: URL?
+    weak var delegate: AudioRecorderDelegate?
 
     init(condensedTranscript: String) {
         self.condensedTranscript = condensedTranscript
@@ -89,6 +95,29 @@ class AudioRecorder: NSObject, AVAudioRecorderDelegate {
             let audioFilePath = recorder.url
             processWavFile(filePath: audioFilePath.path, condensedTranscript: self.condensedTranscript) { response in
                 print("Processing response: \(response)")
+                
+                if let data = response.data(using: .utf8) {
+                do {
+                    if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: String],
+                       let transcript = json["transcript"],
+                       let insight = json["insight"],
+                       let condensedTranscript = json["condensed_transcript"] {
+                        // Update the condensedTranscript for next recording
+                        self.condensedTranscript = condensedTranscript
+                        
+                        // Notify the delegate on the main thread
+                        if !transcript.isEmpty {
+                            DispatchQueue.main.async {
+                                self.delegate?.audioRecorder(self, didUpdateTranscript: transcript)
+                                self.delegate?.audioRecorder(self, didReceiveInsight: insight)
+                            }
+                        }
+                        
+                    }
+                } catch {
+                    print("Failed to parse JSON response: \(error)")
+                    }
+                }
                 // Handle UI updates if necessary on the main thread
                 DispatchQueue.main.async {
                     // Update UI here

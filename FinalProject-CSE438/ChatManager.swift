@@ -8,13 +8,18 @@
 import CoreData
 import UIKit
 
+struct MessageType {
+    static let transcript = "transcript"
+    static let modelThought = "modelThought"
+    static let questionAnswer = "questionAnswer"
+}
+
 // Singleton class to manage chat operations using Core Data
 class ChatManager {
     static let shared = ChatManager()
     
-    private let context: NSManagedObjectContext
+    public let context: NSManagedObjectContext
     
-    // Private initializer to ensure only one instance is created
     private init() {
         self.context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     }
@@ -34,13 +39,13 @@ class ChatManager {
         }
     }
     
-    func saveMessage(content: String, isFromUser: Bool, isTranscript: Bool, chat: Chat) {
+    func saveMessage(content: String, isFromUser: Bool, messageType: String, chat: Chat) {
         let message = Message(context: context)
         message.content = content
         message.isFromUser = isFromUser
-        message.isTranscript = isTranscript
         message.timestamp = Date()
         message.chat = chat
+        message.messageType = messageType
         
         do {
             try context.save()
@@ -50,20 +55,20 @@ class ChatManager {
     }
     
     func fetchAllChats() -> [Chat] {
-        let request: NSFetchRequest<Chat> = Chat.fetchRequest()
-        request.sortDescriptors = [NSSortDescriptor(key: "createdAt", ascending: false)]
-        
-        do {
-            return try context.fetch(request)
-        } catch {
-            print("Error fetching chats: \(error)")
-            return []
-        }
-    }
+           let request: NSFetchRequest<Chat> = Chat.fetchRequest()
+           request.sortDescriptors = [NSSortDescriptor(key: "createdAt", ascending: false)]
+           
+           do {
+               return try context.fetch(request)
+           } catch {
+               print("Error fetching chats: \(error)")
+               return []
+           }
+       }
     
-    func fetchMessages(for chat: Chat, isTranscript: Bool) -> [Message] {
+    func fetchMessages(for chat: Chat, messageType: String) -> [Message] {
         let request: NSFetchRequest<Message> = Message.fetchRequest()
-        request.predicate = NSPredicate(format: "chat == %@ AND isTranscript == %@", chat, NSNumber(value: isTranscript))
+        request.predicate = NSPredicate(format: "chat == %@ AND messageType == %@", chat, messageType)
         request.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: true)]
         
         do {
@@ -73,6 +78,16 @@ class ChatManager {
             return []
         }
     }
+    
+    func updateMessage(_ message: Message, withContent content: String) {
+        message.content = content
+        do {
+            try context.save()
+        } catch {
+            print("Error updating message: \(error)")
+        }
+    }
+    
     
     func deleteChat(_ chat: Chat) {
         context.delete(chat)

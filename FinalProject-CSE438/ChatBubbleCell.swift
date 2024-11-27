@@ -11,7 +11,6 @@ import UIKit
 class ChatBubbleCell: UITableViewCell {
     private var trailingConstraint: NSLayoutConstraint!
     private var leadingConstraint: NSLayoutConstraint!
-    private var isFromUser: Bool = false
     
     let bubbleBackgroundView: UIView = {
         let view = UIView()
@@ -22,6 +21,7 @@ class ChatBubbleCell: UITableViewCell {
         view.layer.shadowOpacity = 0.1
         view.layer.shadowOffset = CGSize(width: 0, height: 1)
         view.layer.shadowRadius = 4
+        view.isUserInteractionEnabled = true // Enable interaction
         return view
     }()
     
@@ -30,16 +30,20 @@ class ChatBubbleCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        label.isUserInteractionEnabled = true // Enable interaction
         return label
     }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
+        setupContextMenuInteraction()
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
+        setupViews()
+        setupContextMenuInteraction()
     }
     
     private func setupViews() {
@@ -65,7 +69,14 @@ class ChatBubbleCell: UITableViewCell {
         trailingConstraint = bubbleBackgroundView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
         leadingConstraint = bubbleBackgroundView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16)
     }
-
+    
+    private func setupContextMenuInteraction() {
+        if #available(iOS 13.0, *) {
+            let interaction = UIContextMenuInteraction(delegate: self)
+            bubbleBackgroundView.addInteraction(interaction)
+        }
+    }
+    
     func configure(with message: String, isFromUser: Bool) {
         messageLabel.text = message
 
@@ -81,6 +92,23 @@ class ChatBubbleCell: UITableViewCell {
             
             trailingConstraint.isActive = false
             leadingConstraint.isActive = true
+        }
+    }
+}
+
+// MARK: - UIContextMenuInteractionDelegate
+
+@available(iOS 13.0, *)
+extension ChatBubbleCell: UIContextMenuInteractionDelegate {
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction,
+                                configurationForMenuAtLocation location: CGPoint)
+                                -> UIContextMenuConfiguration? {
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { suggestedActions in
+            // Create a copy action
+            let copyAction = UIAction(title: "Copy", image: UIImage(systemName: "doc.on.doc")) { action in
+                UIPasteboard.general.string = self.messageLabel.text
+            }
+            return UIMenu(title: "", children: [copyAction])
         }
     }
 }
