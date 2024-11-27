@@ -8,15 +8,11 @@ protocol AudioRecorderDelegate: AnyObject {
 class AudioRecorder: NSObject, AVAudioRecorderDelegate {
     var audioRecorder: AVAudioRecorder?
     var recordingTimer: Timer?
-    var condensedTranscript: String
+//    var condensedTranscript: String
+    var transcript: String = ""
     var isStopping: Bool = false
     var currentAudioFilename: URL?
     weak var delegate: AudioRecorderDelegate?
-
-    init(condensedTranscript: String) {
-        self.condensedTranscript = condensedTranscript
-        super.init()
-    }
 
     func startRecording() {
         AVAudioApplication.requestRecordPermission { granted in
@@ -27,6 +23,12 @@ class AudioRecorder: NSObject, AVAudioRecorderDelegate {
             DispatchQueue.main.async {
                 self.setupRecordingSession()
                 self.startRecordingAudio()
+
+                // Set up a timer to rerecord every ten seconds
+                self.recordingTimer?.invalidate()
+                self.recordingTimer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { _ in
+                    self.restartRecording()
+                }
             }
         }
     }
@@ -42,6 +44,10 @@ class AudioRecorder: NSObject, AVAudioRecorderDelegate {
     }
 
     func startRecordingAudio() {
+        if audioRecorder?.isRecording == true {
+            print("Already recording.")
+            return
+        }
         // Generate a unique filename for each recording
         currentAudioFilename = getDocumentsDirectory().appendingPathComponent("recording_\(Date().timeIntervalSince1970).wav")
 
@@ -59,12 +65,6 @@ class AudioRecorder: NSObject, AVAudioRecorderDelegate {
             audioRecorder?.delegate = self
             audioRecorder?.record()
             print("Recording started.")
-
-            // Set up a timer to rerecord every ten seconds
-            recordingTimer?.invalidate()
-            recordingTimer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { _ in
-                self.restartRecording()
-            }
         } catch {
             print("Could not start recording: \(error)")
         }
@@ -85,46 +85,49 @@ class AudioRecorder: NSObject, AVAudioRecorderDelegate {
             return
         }
 
-        // Start new recording immediately to minimize gaps
-        if !isStopping {
-            startRecordingAudio()
-        }
-
         // Process the audio file in the background
         DispatchQueue.global(qos: .background).async {
             let audioFilePath = recorder.url
-            processWavFile(filePath: audioFilePath.path, condensedTranscript: self.condensedTranscript) { response in
+            processWavFile(filePath: audioFilePath.path, condensedTranscript: self.transcript) { response in
                 print("Processing response: \(response)")
-                
+
                 if let data = response.data(using: .utf8) {
-                do {
-                    if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: String],
-                       let transcript = json["transcript"],
-                       let insight = json["insight"],
-                       let condensedTranscript = json["condensed_transcript"] {
-                        // Update the condensedTranscript for next recording
-                        self.condensedTranscript = condensedTranscript
-                        
-                        // Notify the delegate on the main thread
-                        if !transcript.isEmpty {
-                            DispatchQueue.main.async {
-                                self.delegate?.audioRecorder(self, didUpdateTranscript: transcript)
-                                self.delegate?.audioRecorder(self, didReceiveInsight: insight)
+                    do {
+                        if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: String],
+                           let transcript = json["transcript"],
+                           let insight = json["insight"]
+                           {
+                            // Update the condensedTranscript for next recording
+//                            self.condensedTranscript = condensedTranscript
+                            print("this is the insight \(insight)")
+
+                            // Notify the delegate on the main thread
+                            if !transcript.isEmpty {
+                                DispatchQueue.main.async {
+                                    self.delegate?.audioRecorder(self, didUpdateTranscript: transcript)
+                                    self.delegate?.audioRecorder(self, didReceiveInsight: insight)
+                                }
                             }
+
                         }
-                        
-                    }
-                } catch {
-                    print("Failed to parse JSON response: \(error)")
+                    } catch {
+                        print("Failed to parse JSON response: \(error)")
                     }
                 }
                 // Handle UI updates if necessary on the main thread
-                DispatchQueue.main.async {
-                    // Update UI here
-                }
+//                DispatchQueue.main.async {
+//                    // Update UI here
+//                }
                 // Optionally delete the processed file to save space
                 self.deleteAudioFile(at: audioFilePath)
             }
+        }
+
+        // Start new recording immediately to minimize gaps
+        if !isStopping {
+            startRecordingAudio()
+        } else {
+            audioRecorder = nil
         }
     }
 

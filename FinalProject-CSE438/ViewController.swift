@@ -55,8 +55,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         loadMessages()
 
         // Initialize AudioRecorder
-        let initialTranscript = transcriptMessages.first?.0 ?? ""
-        audioRecorder = AudioRecorder(condensedTranscript: initialTranscript)
+        audioRecorder = AudioRecorder()
         audioRecorder.delegate = self
 
         // Register keyboard notifications
