@@ -7,6 +7,27 @@
 
 import UIKit
 
+enum TimePeriod: Int, CaseIterable {
+    case today
+    case yesterday
+    case thisWeek
+    case older
+    
+    var title: String {
+        switch self {
+        case .today: return "Today"
+        case .yesterday: return "Yesterday"
+        case .thisWeek: return "This Week"
+        case .older: return "Older"
+        }
+    }
+}
+
+struct GroupedChats {
+    let period: TimePeriod
+    var chats: [Chat]
+}
+
 class HistoryViewController: UIViewController {
     
     @IBOutlet weak var searchField: UITextField!
@@ -15,20 +36,22 @@ class HistoryViewController: UIViewController {
     private var allChats: [Chat] = []
     private var filteredChats: [Chat] = []
     private var isSearching: Bool = false
+    private var groupedChats: [GroupedChats] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
         setupSearchField()
         loadChats()
+        self.title = "Chats"
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(toggleEditingMode))
+        //        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(toggleEditingMode))
     }
     
-    @objc private func toggleEditingMode() {
-        tableView.setEditing(!tableView.isEditing, animated: true)
-        navigationItem.rightBarButtonItem?.title = tableView.isEditing ? "Done" : "Edit"
-    }
+    //    @objc private func toggleEditingMode() {
+    //        tableView.setEditing(!tableView.isEditing, animated: true)
+    //        navigationItem.rightBarButtonItem?.title = tableView.isEditing ? "Done" : "Edit"
+    //    }
     
     private func setupTableView() {
         tableView.delegate = self
@@ -55,6 +78,46 @@ class HistoryViewController: UIViewController {
     
     private func loadChats() {
         allChats = ChatManager.shared.fetchAllChats()
+        
+        let calendar = Calendar.current
+        let now = Date()
+        let startOfToday = calendar.startOfDay(for: now)
+        let startOfYesterday = calendar.date(byAdding: .day, value: -1, to: startOfToday)!
+        let startOfWeek = calendar.date(byAdding: .day, value: -7, to: startOfToday)!
+        
+        var todayChats: [Chat] = []
+        var yesterdayChats: [Chat] = []
+        var thisWeekChats: [Chat] = []
+        var olderChats: [Chat] = []
+        
+        for chat in allChats {
+            guard let createdAt = chat.createdAt else { continue }
+            
+            if calendar.isDate(createdAt, inSameDayAs: now) {
+                todayChats.append(chat)
+            } else if calendar.isDate(createdAt, inSameDayAs: startOfYesterday) {
+                yesterdayChats.append(chat)
+            } else if createdAt >= startOfWeek {
+                thisWeekChats.append(chat)
+            } else {
+                olderChats.append(chat)
+            }
+        }
+        
+        groupedChats = []
+        if !todayChats.isEmpty {
+            groupedChats.append(GroupedChats(period: .today, chats: todayChats))
+        }
+        if !yesterdayChats.isEmpty {
+            groupedChats.append(GroupedChats(period: .yesterday, chats: yesterdayChats))
+        }
+        if !thisWeekChats.isEmpty {
+            groupedChats.append(GroupedChats(period: .thisWeek, chats: thisWeekChats))
+        }
+        if !olderChats.isEmpty {
+            groupedChats.append(GroupedChats(period: .older, chats: olderChats))
+        }
+        
         filteredChats = allChats
         tableView.reloadData()
     }
@@ -62,10 +125,23 @@ class HistoryViewController: UIViewController {
     @IBAction func createChatButtonPressed(_ sender: Any) {
         if let chat = ChatManager.shared.createChat(title: "Chat \(allChats.count + 1)") {
             allChats.insert(chat, at: 0)
+            
+            if let firstGroup = groupedChats.first, firstGroup.period == .today {
+                groupedChats[0].chats.insert(chat, at: 0)
+            } else {
+                groupedChats.insert(GroupedChats(period: .today, chats: [chat]), at: 0)
+            }
+            
             if !isSearching {
                 filteredChats = allChats
             }
+            
             tableView.reloadData()
+            
+            if let chatVC = storyboard?.instantiateViewController(withIdentifier: "ViewController") as? ViewController {
+                chatVC.currentChat = chat
+                navigationController?.pushViewController(chatVC, animated: true)
+            }
         }
     }
     
@@ -79,13 +155,22 @@ class HistoryViewController: UIViewController {
         
         isSearching = true
         filteredChats = allChats.filter { $0.title?.lowercased().contains(searchText) ?? false }
-        
         tableView.reloadData()
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let chatToDelete = filteredChats[indexPath.row]
+            let chatToDelete: Chat
+            if isSearching {
+                chatToDelete = filteredChats[indexPath.row]
+                filteredChats.remove(at: indexPath.row)
+            } else {
+                chatToDelete = groupedChats[indexPath.section].chats[indexPath.row]
+                groupedChats[indexPath.section].chats.remove(at: indexPath.row)
+                if groupedChats[indexPath.section].chats.isEmpty {
+                    groupedChats.remove(at: indexPath.section)
+                }
+            }
             
             ChatManager.shared.deleteChat(chatToDelete)
             
@@ -93,7 +178,6 @@ class HistoryViewController: UIViewController {
                 allChats.remove(at: indexInAllChats)
             }
             
-            filteredChats.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }
@@ -103,16 +187,19 @@ class HistoryViewController: UIViewController {
 extension HistoryViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return isSearching ? 1 : groupedChats.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return filteredChats.count
+        if isSearching {
+            return filteredChats.count
+        }
+        return groupedChats[section].chats.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ChatCell", for: indexPath)
-        let chat = filteredChats[indexPath.row]
+        let chat = isSearching ? filteredChats[indexPath.row] : groupedChats[indexPath.section].chats[indexPath.row]
         let chatTitle = chat.title
         
         var content = cell.defaultContentConfiguration()
@@ -124,24 +211,23 @@ extension HistoryViewController: UITableViewDelegate, UITableViewDataSource {
         cell.contentConfiguration = content
         cell.selectionStyle = .none
         cell.backgroundColor = .clear
-
+        
         let pencilIcon = UIImage(systemName: "pencil")
         let accessoryImageView = UIImageView(image: pencilIcon)
-//        accessoryImageView.tintColor = .systemGray
         accessoryImageView.isUserInteractionEnabled = true
         accessoryImageView.tag = indexPath.row
-
+        
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapPencilIcon(_:)))
         accessoryImageView.addGestureRecognizer(tapGesture)
         cell.accessoryView = accessoryImageView
-
+        
         return cell
     }
-
+    
     @objc private func didTapPencilIcon(_ sender: UITapGestureRecognizer) {
         guard let index = sender.view?.tag else { return }
         let chat = filteredChats[index]
-
+        
         let alert = UIAlertController(title: "Edit Chat Name", message: "Enter a new name for your chat", preferredStyle: .alert)
         alert.addTextField { textField in
             textField.text = chat.title
@@ -164,9 +250,13 @@ extension HistoryViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "HeaderView")
         var content = UIListContentConfiguration.groupedHeader()
-        content.text = "All Chats"  // Set the title as "All Chats"
+        
+        let headerTitle = isSearching ? "Search Results" : groupedChats[section].period.title
+        content.text = headerTitle
         content.textProperties.font = .systemFont(ofSize: 16, weight: .semibold)
         content.textProperties.color = .label
+        content.textProperties.allowsDefaultTighteningForTruncation = false
+        content.textProperties.transform = .none
         content.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 6, leading: 16, bottom: 12, trailing: 16)
         
         headerView?.contentConfiguration = content

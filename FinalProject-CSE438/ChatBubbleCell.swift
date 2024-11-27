@@ -57,7 +57,7 @@ class ChatBubbleCell: UITableViewCell {
             bubbleBackgroundView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             bubbleBackgroundView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
             bubbleBackgroundView.widthAnchor.constraint(lessThanOrEqualToConstant: 280),
-            bubbleBackgroundView.widthAnchor.constraint(greaterThanOrEqualToConstant: 80),
+            bubbleBackgroundView.widthAnchor.constraint(greaterThanOrEqualToConstant: 40),
 
             messageLabel.topAnchor.constraint(equalTo: bubbleBackgroundView.topAnchor, constant: 12),
             messageLabel.leadingAnchor.constraint(equalTo: bubbleBackgroundView.leadingAnchor, constant: 12),

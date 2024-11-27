@@ -27,8 +27,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         // Setup navigation bar title
         let titleLabel = UILabel()
         titleLabel.text = "Live Lecture Companion"
-        titleLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
-        titleLabel.textColor = .white
+        titleLabel.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
         titleLabel.sizeToFit()
         let leftTitleItem = UIBarButtonItem(customView: titleLabel)
         navbar.leftBarButtonItem = leftTitleItem
