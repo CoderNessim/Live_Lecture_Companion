@@ -15,6 +15,7 @@ class AudioRecorder: NSObject, AVAudioRecorderDelegate {
     weak var delegate: AudioRecorderDelegate?
 
     func startRecording() {
+        isStopping = false // Reset the flag here
         AVAudioApplication.requestRecordPermission { granted in
             guard granted else {
                 print("Permission to record not granted.")
@@ -33,6 +34,7 @@ class AudioRecorder: NSObject, AVAudioRecorderDelegate {
         }
     }
 
+
     func setupRecordingSession() {
         let audioSession = AVAudioSession.sharedInstance()
         do {
@@ -44,6 +46,7 @@ class AudioRecorder: NSObject, AVAudioRecorderDelegate {
     }
 
     func startRecordingAudio() {
+        isStopping = false
         if audioRecorder?.isRecording == true {
             print("Already recording.")
             return
