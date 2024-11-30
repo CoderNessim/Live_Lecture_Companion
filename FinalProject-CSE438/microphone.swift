@@ -15,7 +15,7 @@ class AudioRecorder: NSObject, AVAudioRecorderDelegate {
     weak var delegate: AudioRecorderDelegate?
 
     func startRecording() {
-        isStopping = false // Reset the flag here
+        isStopping = false 
         AVAudioApplication.requestRecordPermission { granted in
             guard granted else {
                 print("Permission to record not granted.")
@@ -25,7 +25,6 @@ class AudioRecorder: NSObject, AVAudioRecorderDelegate {
                 self.setupRecordingSession()
                 self.startRecordingAudio()
 
-                // Set up a timer to rerecord every ten seconds
                 self.recordingTimer?.invalidate()
                 self.recordingTimer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { _ in
                     self.restartRecording()
@@ -51,7 +50,7 @@ class AudioRecorder: NSObject, AVAudioRecorderDelegate {
             print("Already recording.")
             return
         }
-        // Generate a unique filename for each recording
+        //  unique filename for each recording
         currentAudioFilename = getDocumentsDirectory().appendingPathComponent("recording_\(Date().timeIntervalSince1970).wav")
 
         let settings: [String: Any] = [
@@ -104,7 +103,6 @@ class AudioRecorder: NSObject, AVAudioRecorderDelegate {
 //                            self.condensedTranscript = condensedTranscript
                             print("this is the insight \(insight)")
 
-                            // Notify the delegate on the main thread
                             if !transcript.isEmpty {
                                 DispatchQueue.main.async {
                                     self.delegate?.audioRecorder(self, didUpdateTranscript: transcript)
@@ -117,10 +115,7 @@ class AudioRecorder: NSObject, AVAudioRecorderDelegate {
                         print("Failed to parse JSON response: \(error)")
                     }
                 }
-                // Handle UI updates if necessary on the main thread
-//                DispatchQueue.main.async {
-//                    // Update UI here
-//                }
+
                 // Optionally delete the processed file to save space
                 self.deleteAudioFile(at: audioFilePath)
             }

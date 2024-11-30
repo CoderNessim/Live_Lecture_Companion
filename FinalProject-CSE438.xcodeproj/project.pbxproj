@@ -16,7 +16,6 @@
 		5436153B2CCC86880063BB7F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5436153A2CCC86880063BB7F /* Assets.xcassets */; };
 		5436153E2CCC86880063BB7F /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 5436153D2CCC86880063BB7F /* Base */; };
 		546129B92CD2901C00098578 /* ChatBubbleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546129B82CD2901C00098578 /* ChatBubbleCell.swift */; };
-		546D2F212CF56F5C004E4059 /* recording 1.wav in Resources */ = {isa = PBXBuildFile; fileRef = 546D2F202CF56F5C004E4059 /* recording 1.wav */; };
 		8757B1F92CF2796E00A301C1 /* api.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8757B1F82CF2796E00A301C1 /* api.swift */; };
 		87658A842CE2BD0D004EA353 /* microphone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87658A832CE2BD0D004EA353 /* microphone.swift */; };
 		87658A872CE2CFB9004EA353 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 87658A862CE2CFB9004EA353 /* Algorithms */; };
@@ -37,7 +36,6 @@
 		5436153D2CCC86880063BB7F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5436153F2CCC86880063BB7F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		546129B82CD2901C00098578 /* ChatBubbleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatBubbleCell.swift; sourceTree = "<group>"; };
-		546D2F202CF56F5C004E4059 /* recording 1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "recording 1.wav"; sourceTree = "<group>"; };
 		8757B1F82CF2796E00A301C1 /* api.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = api.swift; sourceTree = "<group>"; };
 		87658A832CE2BD0D004EA353 /* microphone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = microphone.swift; sourceTree = "<group>"; };
 		AF50AB8F2CDC499C00AB4B30 /* ChatManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatManager.swift; sourceTree = "<group>"; };
@@ -77,7 +75,6 @@
 			isa = PBXGroup;
 			children = (
 				5436152E2CCC86860063BB7F /* AppDelegate.swift */,
-				546D2F202CF56F5C004E4059 /* recording 1.wav */,
 				543615302CCC86860063BB7F /* SceneDelegate.swift */,
 				543615322CCC86860063BB7F /* ViewController.swift */,
 				546129B82CD2901C00098578 /* ChatBubbleCell.swift */,
@@ -163,7 +160,6 @@
 			files = (
 				5436153B2CCC86880063BB7F /* Assets.xcassets in Resources */,
 				5436153E2CCC86880063BB7F /* Base in Resources */,
-				546D2F212CF56F5C004E4059 /* recording 1.wav in Resources */,
 				543615362CCC86860063BB7F /* Base in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
