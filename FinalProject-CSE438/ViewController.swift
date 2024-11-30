@@ -202,9 +202,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func audioRecorder(_ recorder: AudioRecorder, didReceiveInsight insight: String) {
         guard let chat = currentChat else { return }
         ChatManager.shared.saveMessage(content: insight, isFromUser: false, messageType: MessageType.modelThought, chat: chat)
-        
-        if insight == "N" {return}
 
+        //ignore messages with only N
+        if insight == "N" || insight == "\"N\"" {return}
         modelThoughtsMessages.append((insight, false))
         modelThoughtsTableView.reloadData()
         scrollToBottom(tableView: modelThoughtsTableView)
