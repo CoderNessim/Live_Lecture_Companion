@@ -8,7 +8,7 @@ protocol AudioRecorderDelegate: AnyObject {
 class AudioRecorder: NSObject, AVAudioRecorderDelegate {
     var audioRecorder: AVAudioRecorder?
     var recordingTimer: Timer?
-//    var condensedTranscript: String
+    var condensedTranscript: String = ""
     var transcript: String = ""
     var isStopping: Bool = false
     var currentAudioFilename: URL?
@@ -90,17 +90,18 @@ class AudioRecorder: NSObject, AVAudioRecorderDelegate {
         // Process the audio file in the background
         DispatchQueue.global(qos: .background).async {
             let audioFilePath = recorder.url
-            processWavFile(filePath: audioFilePath.path, condensedTranscript: self.transcript) { response in
+            processWavFile(filePath: audioFilePath.path, condensedTranscript: self.condensedTranscript) { response in
                 print("Processing response: \(response)")
 
                 if let data = response.data(using: .utf8) {
                     do {
                         if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: String],
                            let transcript = json["transcript"],
-                           let insight = json["insight"]
+                           let insight = json["insight"],
+                           let condensed = json["condensed_transcript"]
                            {
                             // Update the condensedTranscript for next recording
-//                            self.condensedTranscript = condensedTranscript
+                            self.condensedTranscript = condensed
                             print("this is the insight \(insight)")
 
                             if !transcript.isEmpty {

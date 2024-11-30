@@ -8,7 +8,7 @@ func processWavData(bytestream: Data, condensedTranscript: String, completion: @
         completion("Invalid URL")
         return
     }
-
+    
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
     request.setValue("application/octet-stream", forHTTPHeaderField: "Content-Type")
@@ -31,8 +31,6 @@ func processWavData(bytestream: Data, condensedTranscript: String, completion: @
         }
         completion(responseString)
     }
-    task.resume()
-
     task.resume()
 }
 
