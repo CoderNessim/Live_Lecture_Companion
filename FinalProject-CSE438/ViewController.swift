@@ -148,36 +148,36 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     // MARK: - UITextFieldDelegate
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
+            textField.resignFirstResponder()
 
-        if let text = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty, let chat = currentChat {
-            ChatManager.shared.saveMessage(content: text, isFromUser: true, messageType: MessageType.questionAnswer, chat: chat)
-            questionAndAnswerMessages.append((text, true))
-            textField.text = ""
+            if let text = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty, let chat = currentChat {
+                ChatManager.shared.saveMessage(content: text, isFromUser: true, messageType: MessageType.questionAnswer, chat: chat)
+                questionAndAnswerMessages.append((text, true))
+                textField.text = ""
 
-            questionAndAnswerTableView.reloadData()
-            scrollToBottom(tableView: questionAndAnswerTableView)
+                questionAndAnswerTableView.reloadData()
+                scrollToBottom(tableView: questionAndAnswerTableView)
 
-            APICaller.shared.getResponse(input: text) { [weak self] result in
-                guard let self = self else { return }
-                DispatchQueue.main.async {
-                    switch result {
-                    case .success(let output):
-                        ChatManager.shared.saveMessage(content: output, isFromUser: false, messageType: MessageType.questionAnswer, chat: chat)
-                        self.questionAndAnswerMessages.append((output, false))
-                    case .failure(let error):
-                        let errorMessage = "Sorry, I couldn't process that request."
-                        ChatManager.shared.saveMessage(content: errorMessage, isFromUser: false, messageType: MessageType.questionAnswer, chat: chat)
-                        self.questionAndAnswerMessages.append((errorMessage, false))
-                        print("Error: \(error)")
+                APICaller.shared.getResponse(input: text) { [weak self] result in
+                    guard let self = self else { return }
+                    DispatchQueue.main.async {
+                        switch result {
+                        case .success(let output):
+                            ChatManager.shared.saveMessage(content: output, isFromUser: false, messageType: MessageType.questionAnswer, chat: chat)
+                            self.questionAndAnswerMessages.append((output, false))
+                        case .failure(let error):
+                            let errorMessage = "Sorry, I couldn't process that request."
+                            ChatManager.shared.saveMessage(content: errorMessage, isFromUser: false, messageType: MessageType.questionAnswer, chat: chat)
+                            self.questionAndAnswerMessages.append((errorMessage, false))
+                            print("Error: \(error)")
+                        }
+                        self.questionAndAnswerTableView.reloadData()
+                        self.scrollToBottom(tableView: self.questionAndAnswerTableView)
                     }
-                    self.questionAndAnswerTableView.reloadData()
-                    self.scrollToBottom(tableView: self.questionAndAnswerTableView)
                 }
             }
+            return true
         }
-        return true
-    }
 
     // MARK: - AudioRecorderDelegate Methods
     func audioRecorder(_ recorder: AudioRecorder, didUpdateTranscript transcript: String) {
@@ -215,6 +215,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
 
     @IBAction func microphoneTapped(_ sender: Any) {
+        handleMicrophoneChange()
+    }
+    
+    func handleMicrophoneChange() {
         isRecording.toggle()
         let darkGreen = UIColor(red: 0.0, green: 0.5, blue: 0.0, alpha: 1.0)
 
