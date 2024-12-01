@@ -170,7 +170,7 @@ extension HistoryViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "HeaderView")
         var content = UIListContentConfiguration.groupedHeader()
-        content.text = "All Chats"  // Set the title as "All Chats"
+        content.text = "All Chats"  
         content.textProperties.font = .systemFont(ofSize: 16, weight: .semibold)
         content.textProperties.color = .label
         content.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 6, leading: 16, bottom: 12, trailing: 16)

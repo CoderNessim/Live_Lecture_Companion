@@ -65,7 +65,6 @@ class ChatBubbleCell: UITableViewCell {
             messageLabel.bottomAnchor.constraint(equalTo: bubbleBackgroundView.bottomAnchor, constant: -12)
         ])
 
-        // Create constraints for trailing and leading, but don’t activate them here
         trailingConstraint = bubbleBackgroundView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
         leadingConstraint = bubbleBackgroundView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16)
     }
@@ -104,7 +103,6 @@ extension ChatBubbleCell: UIContextMenuInteractionDelegate {
                                 configurationForMenuAtLocation location: CGPoint)
                                 -> UIContextMenuConfiguration? {
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { suggestedActions in
-            // Create a copy action
             let copyAction = UIAction(title: "Copy", image: UIImage(systemName: "doc.on.doc")) { action in
                 UIPasteboard.general.string = self.messageLabel.text
             }

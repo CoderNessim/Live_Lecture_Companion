@@ -24,7 +24,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tapGesture)
 
-        // Setup navigation bar title
+        // seting up navigation bar title
         let titleLabel = UILabel()
         titleLabel.text = "Live Lecture Companion"
         titleLabel.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
@@ -32,12 +32,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let leftTitleItem = UIBarButtonItem(customView: titleLabel)
         navbar.leftBarButtonItem = leftTitleItem
 
-        // Register table views
+        // Register table views here
         transcriptTableView.register(ChatBubbleCell.self, forCellReuseIdentifier: "ChatBubbleCell")
         questionAndAnswerTableView.register(ChatBubbleCell.self, forCellReuseIdentifier: "ChatBubbleCell")
         modelThoughtsTableView.register(ChatBubbleCell.self, forCellReuseIdentifier: "ChatBubbleCell")
 
-        // Set table view delegates and data sources
+        // Set table view delegates and data sources below
         transcriptTableView.dataSource = self
         transcriptTableView.delegate = self
         questionAndAnswerTableView.dataSource = self
@@ -45,19 +45,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         modelThoughtsTableView.dataSource = self
         modelThoughtsTableView.delegate = self
 
-        // Table view configurations
         configureTableViews()
 
         textField.delegate = self
 
-        // Load messages
         loadMessages()
 
-        // Initialize AudioRecorder
         audioRecorder = AudioRecorder()
         audioRecorder.delegate = self
 
-        // Register keyboard notifications
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
@@ -93,7 +89,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
 
     private func configureTableViews() {
-        // Disable selection and separators
         [transcriptTableView, questionAndAnswerTableView, modelThoughtsTableView].forEach { tableView in
             tableView?.separatorStyle = .none
             tableView?.allowsSelection = false
@@ -185,15 +180,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
         let existingMessages = ChatManager.shared.fetchMessages(for: chat, messageType: MessageType.transcript)
         if let existingMessage = existingMessages.first {
-            // Update the existing transcript message
             let updatedContent = (existingMessage.content ?? "") + " " + transcript
             ChatManager.shared.updateMessage(existingMessage, withContent: updatedContent)
         } else {
-            // Create a new transcript message
             ChatManager.shared.saveMessage(content: transcript, isFromUser: false, messageType: MessageType.transcript, chat: chat)
         }
 
-        // Reload messages
         loadMessages()
         transcriptTableView.reloadData()
         scrollToBottom(tableView: transcriptTableView)
@@ -201,9 +193,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     func audioRecorder(_ recorder: AudioRecorder, didReceiveInsight insight: String) {
         guard let chat = currentChat else { return }
+        //ignore messages with N
+        if insight == "N" || insight == "\"N\"" || insight.hasSuffix("(N)") {return}
+        
         ChatManager.shared.saveMessage(content: insight, isFromUser: false, messageType: MessageType.modelThought, chat: chat)
-        //ignore messages with only N
-        if insight == "N" || insight == "\"N\"" {return}
         modelThoughtsMessages.append((insight, false))
         modelThoughtsTableView.reloadData()
         scrollToBottom(tableView: modelThoughtsTableView)

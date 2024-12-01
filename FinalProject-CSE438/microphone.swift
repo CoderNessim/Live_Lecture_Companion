@@ -116,7 +116,7 @@ class AudioRecorder: NSObject, AVAudioRecorderDelegate {
                     }
                 }
 
-                // Optionally delete the processed file to save space
+                //  deleting the processed file to save space
                 self.deleteAudioFile(at: audioFilePath)
             }
         }
