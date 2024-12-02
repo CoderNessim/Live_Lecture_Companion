@@ -193,14 +193,25 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     func audioRecorder(_ recorder: AudioRecorder, didReceiveInsight insight: String) {
         guard let chat = currentChat else { return }
-        //ignore messages with N
-        if insight == "N" || insight == "\"N\"" || insight.hasSuffix("(N)") {return}
         
-        ChatManager.shared.saveMessage(content: insight, isFromUser: false, messageType: MessageType.modelThought, chat: chat)
-        modelThoughtsMessages.append((insight, false))
+        //do not process insights that are N or are irrelevant
+        if insight == "N" || insight == "\"N\"" || insight.hasSuffix("(N)") || insight.contains("condensed transcript") {
+                return
+            }
+        
+        var processedInsight = insight
+        
+        //remove prefix summary if it exists
+        if insight.hasPrefix("Summary: ") {
+            processedInsight = String(insight.dropFirst("Summary: ".count))
+        }
+
+        ChatManager.shared.saveMessage(content: processedInsight, isFromUser: false, messageType: MessageType.modelThought, chat: chat)
+        modelThoughtsMessages.append((processedInsight, false))
         modelThoughtsTableView.reloadData()
         scrollToBottom(tableView: modelThoughtsTableView)
     }
+
 
     @IBAction func historyButtonTapped(_ sender: Any) {
         if isRecording {
